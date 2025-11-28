@@ -1,5 +1,5 @@
 import { Layout } from "@/components/layout";
-import { FeatureCard } from "@/components/ui-custom";
+import { FeatureCard, HeroSection } from "@/components/ui-custom"; // Use the exported HeroSection from ui-custom
 import { categories, products, testimonials } from "@/lib/data";
 import { Clock, ShieldCheck, Truck, Quote, Smartphone, ChevronRight, Star, Utensils, Gift, Mail } from "lucide-react";
 import { motion } from "framer-motion";
@@ -7,84 +7,13 @@ import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
-import heroImg from '@assets/stock_images/dark_food_website_he_af16fb5c.jpg'; 
+// Import Hero Images
+import heroImg1 from '@assets/stock_images/dark_food_website_he_af16fb5c.jpg'; 
+import heroImg2 from '@assets/stock_images/gourmet_pizza_hero_b_d49ddea6.jpg';
+import heroImg3 from '@assets/stock_images/sushi_platter_hero_b_b4bb5081.jpg';
+import heroImg4 from '@assets/stock_images/healthy_salad_bowl_h_d88005d8.jpg';
+
 import chefSpecialImg from '@assets/stock_images/chef_presenting_a_go_8f87265b.jpg'; 
-
-// Hero Section Component
-function HeroSection({ 
-  headline, 
-  subheadline, 
-  ctaText, 
-  image 
-}: { 
-  headline: string; 
-  subheadline: string; 
-  ctaText: string; 
-  image: string; 
-}) {
-  return (
-    <section className="relative h-[90vh] min-h-[600px] w-full overflow-hidden flex items-center">
-      {/* Background Image with Overlay */}
-      <div className="absolute inset-0 z-0">
-        <img 
-          src={image} 
-          alt="Hero Food" 
-          className="w-full h-full object-cover"
-        />
-        <div className="absolute inset-0 bg-gradient-to-r from-black/95 via-black/70 to-transparent/20" />
-      </div>
-
-      <div className="container relative z-10 px-4 max-w-screen-xl">
-        <motion.div 
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          className="max-w-2xl space-y-8"
-        >
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/20 border border-primary/30 text-primary text-sm font-bold uppercase tracking-wider">
-            <span className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
-            </span>
-            Taking Orders Now
-          </div>
-          
-          <h1 className="text-5xl md:text-7xl lg:text-8xl font-heading font-bold text-white leading-[0.9] text-glow">
-            {headline}
-          </h1>
-          
-          <p className="text-xl md:text-2xl text-gray-300 font-light leading-relaxed max-w-lg">
-            {subheadline}
-          </p>
-          
-          <div className="pt-6 flex flex-col sm:flex-row gap-4">
-            <Button size="lg" className="bg-primary hover:bg-primary/90 text-white text-lg px-10 py-7 rounded-full font-bold shadow-xl shadow-primary/20 transition-all hover:scale-105 hover:shadow-primary/40" asChild>
-              <Link href="/menu">
-                {ctaText} <ChevronRight className="ml-2 h-5 w-5" />
-              </Link>
-            </Button>
-            <Button variant="outline" size="lg" className="text-white border-white/20 bg-white/5 backdrop-blur-sm hover:bg-white/10 text-lg px-10 py-7 rounded-full transition-all hover:border-white/40" asChild>
-              <Link href="/about">
-                Our Story
-              </Link>
-            </Button>
-          </div>
-          
-          <div className="pt-8 flex items-center gap-8 text-sm text-gray-400 font-medium">
-            <div className="flex items-center gap-2">
-              <Clock className="h-5 w-5 text-primary" />
-              <span>30-45 min Delivery</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <Star className="h-5 w-5 text-secondary fill-secondary" />
-              <span>4.9/5 Rating</span>
-            </div>
-          </div>
-        </motion.div>
-      </div>
-    </section>
-  );
-}
 
 // Category Component
 function CategoryItem({ category, index }: { category: any, index: number }) {
@@ -162,18 +91,25 @@ function HomeFoodCard({ product, index }: { product: any, index: number }) {
 // Process Step Component
 function ProcessStep({ number, title, description }: { number: string, title: string, description: string }) {
   return (
-    <div className="flex flex-col items-center text-center space-y-4 relative">
+    <motion.div 
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.5 }}
+      className="flex flex-col items-center text-center space-y-4 relative"
+    >
       <div className="w-16 h-16 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center text-2xl font-bold font-heading text-primary">
         {number}
       </div>
       <h3 className="text-xl font-bold">{title}</h3>
       <p className="text-muted-foreground text-sm max-w-[250px]">{description}</p>
-    </div>
+    </motion.div>
   );
 }
 
 export default function Home() {
   const popularProducts = products.filter(p => p.popular).slice(0, 4);
+  const heroImages = [heroImg1, heroImg2, heroImg3, heroImg4];
 
   return (
     <Layout>
@@ -181,20 +117,25 @@ export default function Home() {
         headline="Taste the Extraordinary"
         subheadline="Gourmet meals crafted with passion, delivered hot to your doorstep in minutes."
         ctaText="Start Ordering"
-        image={heroImg}
+        images={heroImages}
       />
 
       {/* Categories Strip */}
       <section className="py-16 bg-background border-b border-border">
         <div className="container max-w-screen-xl px-4">
-          <div className="flex justify-between items-end mb-10 px-2">
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="flex justify-between items-end mb-10 px-2"
+          >
             <h2 className="text-2xl md:text-3xl font-heading font-bold">
               What are you craving?
             </h2>
             <Link href="/menu" className="text-primary text-sm font-bold hover:underline flex items-center">
               View Full Menu <ChevronRight className="h-4 w-4 ml-1" />
             </Link>
-          </div>
+          </motion.div>
           
           <div className="grid grid-cols-3 md:grid-cols-6 gap-4 md:gap-8">
             {categories.map((cat, idx) => (
@@ -207,10 +148,15 @@ export default function Home() {
       {/* How It Works */}
       <section className="py-20 bg-card/50">
         <div className="container max-w-screen-xl px-4">
-          <div className="text-center mb-16">
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-16"
+          >
             <span className="text-primary font-bold uppercase tracking-widest text-sm">Simple & Fast</span>
             <h2 className="text-3xl md:text-4xl font-heading font-bold mt-2">How It Works</h2>
-          </div>
+          </motion.div>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-12 relative">
             {/* Connector Line (Desktop only) */}
@@ -238,7 +184,13 @@ export default function Home() {
       {/* Chef's Special Feature */}
       <section className="py-24 bg-background overflow-hidden">
         <div className="container max-w-screen-xl px-4">
-          <div className="bg-card border border-border rounded-3xl overflow-hidden shadow-2xl">
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.95 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+            className="bg-card border border-border rounded-3xl overflow-hidden shadow-2xl"
+          >
             <div className="grid grid-cols-1 lg:grid-cols-2">
               <div className="relative h-[400px] lg:h-auto">
                 <img 
@@ -265,7 +217,7 @@ export default function Home() {
                 </div>
               </div>
             </div>
-          </div>
+          </motion.div>
         </div>
       </section>
 
@@ -276,13 +228,18 @@ export default function Home() {
         <div className="absolute bottom-0 left-0 w-1/3 h-full bg-secondary/5 blur-3xl -z-0 rounded-full -translate-x-1/2"></div>
 
         <div className="container max-w-screen-xl px-4 relative z-10">
-          <div className="text-center max-w-2xl mx-auto mb-16 space-y-4">
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center max-w-2xl mx-auto mb-16 space-y-4"
+          >
             <span className="text-secondary font-bold uppercase tracking-widest text-sm">Crowd Favorites</span>
             <h2 className="text-4xl md:text-5xl font-heading font-bold">Trending This Week</h2>
             <p className="text-muted-foreground text-lg">
               The most ordered items from our kitchen. Tried, tested, and loved by thousands.
             </p>
-          </div>
+          </motion.div>
           
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
             {popularProducts.map((product, idx) => (
@@ -290,11 +247,16 @@ export default function Home() {
             ))}
           </div>
           
-          <div className="mt-16 text-center">
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="mt-16 text-center"
+          >
             <Button size="lg" variant="outline" className="font-bold text-lg px-8 py-6 rounded-full border-primary/50 text-primary hover:bg-primary hover:text-white transition-all" asChild>
               <Link href="/menu">See All Popular Meals</Link>
             </Button>
-          </div>
+          </motion.div>
         </div>
       </section>
 
@@ -364,7 +326,12 @@ export default function Home() {
       <section className="py-20 bg-primary text-white">
         <div className="container max-w-screen-xl px-4">
           <div className="flex flex-col md:flex-row items-center justify-between gap-8">
-            <div className="md:w-1/2 space-y-4">
+            <motion.div 
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              className="md:w-1/2 space-y-4"
+            >
               <div className="flex items-center gap-2 text-black/60 font-bold uppercase text-sm">
                 <Gift className="h-5 w-5" /> Exclusive Deals
               </div>
@@ -374,8 +341,13 @@ export default function Home() {
               <p className="text-white/80 text-lg">
                 Subscribe to our newsletter to get special offers, free delivery codes, and menu updates.
               </p>
-            </div>
-            <div className="md:w-1/2 w-full max-w-md">
+            </motion.div>
+            <motion.div 
+              initial={{ opacity: 0, x: 20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              className="md:w-1/2 w-full max-w-md"
+            >
               <div className="flex gap-2">
                 <Input 
                   placeholder="Enter your email" 
@@ -388,7 +360,7 @@ export default function Home() {
               <p className="text-xs text-white/60 mt-2">
                 No spam. Unsubscribe anytime.
               </p>
-            </div>
+            </motion.div>
           </div>
         </div>
       </section>

@@ -1,58 +1,96 @@
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "wouter";
 import { Star, Plus, Clock, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/lib/cart-context";
 import { cn } from "@/lib/utils";
+import { useState, useEffect } from "react";
 
 // Hero Section Component
 export function HeroSection({ 
   headline, 
   subheadline, 
   ctaText, 
-  image 
+  images 
 }: { 
   headline: string; 
   subheadline: string; 
   ctaText: string; 
-  image: string; 
+  images: string[]; 
 }) {
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentImageIndex((prev) => (prev + 1) % images.length);
+    }, 5000);
+    return () => clearInterval(interval);
+  }, [images.length]);
+
   return (
-    <section className="relative h-[85vh] min-h-[600px] w-full overflow-hidden flex items-center">
-      {/* Background Image with Overlay */}
+    <section className="relative h-[90vh] min-h-[600px] w-full overflow-hidden flex items-center">
+      {/* Background Image Slider */}
       <div className="absolute inset-0 z-0">
-        <img 
-          src={image} 
-          alt="Hero Food" 
-          className="w-full h-full object-cover"
-        />
-        <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/60 to-transparent" />
+        <AnimatePresence mode="popLayout">
+          <motion.img 
+            key={currentImageIndex}
+            src={images[currentImageIndex]} 
+            alt="Hero Food" 
+            initial={{ opacity: 0, scale: 1.1 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 1.5, ease: "easeOut" }}
+            className="absolute inset-0 w-full h-full object-cover"
+          />
+        </AnimatePresence>
+        <div className="absolute inset-0 bg-gradient-to-r from-black/95 via-black/70 to-transparent/20" />
       </div>
 
       <div className="container relative z-10 px-4 max-w-screen-xl">
         <motion.div 
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          className="max-w-2xl space-y-6"
+          transition={{ duration: 0.8, delay: 0.2 }}
+          className="max-w-2xl space-y-8"
         >
-          <h1 className="text-5xl md:text-7xl font-heading font-bold text-white leading-tight text-glow">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/20 border border-primary/30 text-primary text-sm font-bold uppercase tracking-wider">
+            <span className="relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
+            </span>
+            Taking Orders Now
+          </div>
+          
+          <h1 className="text-5xl md:text-7xl lg:text-8xl font-heading font-bold text-white leading-[0.9] text-glow">
             {headline}
           </h1>
-          <p className="text-xl md:text-2xl text-gray-200 font-light">
+          
+          <p className="text-xl md:text-2xl text-gray-300 font-light leading-relaxed max-w-lg">
             {subheadline}
           </p>
-          <div className="pt-4 flex gap-4">
-            <Button size="lg" className="bg-primary hover:bg-primary/90 text-white text-lg px-8 py-6 rounded-full font-bold shadow-lg shadow-primary/20 transition-transform hover:scale-105" asChild>
+          
+          <div className="pt-6 flex flex-col sm:flex-row gap-4">
+            <Button size="lg" className="bg-primary hover:bg-primary/90 text-white text-lg px-10 py-7 rounded-full font-bold shadow-xl shadow-primary/20 transition-all hover:scale-105 hover:shadow-primary/40" asChild>
               <Link href="/menu">
                 {ctaText} <ArrowRight className="ml-2 h-5 w-5" />
               </Link>
             </Button>
-            <Button variant="outline" size="lg" className="text-white border-white/30 hover:bg-white/10 text-lg px-8 py-6 rounded-full" asChild>
+            <Button variant="outline" size="lg" className="text-white border-white/20 bg-white/5 backdrop-blur-sm hover:bg-white/10 text-lg px-10 py-7 rounded-full transition-all hover:border-white/40" asChild>
               <Link href="/about">
-                Learn More
+                Our Story
               </Link>
             </Button>
+          </div>
+          
+          <div className="pt-8 flex items-center gap-8 text-sm text-gray-400 font-medium">
+            <div className="flex items-center gap-2">
+              <Clock className="h-5 w-5 text-primary" />
+              <span>30-45 min Delivery</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <Star className="h-5 w-5 text-secondary fill-secondary" />
+              <span>4.9/5 Rating</span>
+            </div>
           </div>
         </motion.div>
       </div>
