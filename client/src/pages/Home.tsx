@@ -1,12 +1,14 @@
 import { Layout } from "@/components/layout";
 import { FeatureCard } from "@/components/ui-custom";
 import { categories, products, testimonials } from "@/lib/data";
-import { Clock, ShieldCheck, Truck, Quote, Smartphone, ChevronRight, Star } from "lucide-react";
+import { Clock, ShieldCheck, Truck, Quote, Smartphone, ChevronRight, Star, Utensils, Gift, Mail } from "lucide-react";
 import { motion } from "framer-motion";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 
 import heroImg from '@assets/stock_images/dark_food_website_he_af16fb5c.jpg'; 
+import chefSpecialImg from '@assets/stock_images/chef_presenting_a_go_8f87265b.jpg'; 
 
 // Hero Section Component
 function HeroSection({ 
@@ -21,7 +23,7 @@ function HeroSection({
   image: string; 
 }) {
   return (
-    <section className="relative h-[85vh] min-h-[600px] w-full overflow-hidden flex items-center">
+    <section className="relative h-[90vh] min-h-[600px] w-full overflow-hidden flex items-center">
       {/* Background Image with Overlay */}
       <div className="absolute inset-0 z-0">
         <img 
@@ -157,6 +159,19 @@ function HomeFoodCard({ product, index }: { product: any, index: number }) {
   );
 }
 
+// Process Step Component
+function ProcessStep({ number, title, description }: { number: string, title: string, description: string }) {
+  return (
+    <div className="flex flex-col items-center text-center space-y-4 relative">
+      <div className="w-16 h-16 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center text-2xl font-bold font-heading text-primary">
+        {number}
+      </div>
+      <h3 className="text-xl font-bold">{title}</h3>
+      <p className="text-muted-foreground text-sm max-w-[250px]">{description}</p>
+    </div>
+  );
+}
+
 export default function Home() {
   const popularProducts = products.filter(p => p.popular).slice(0, 4);
 
@@ -185,6 +200,71 @@ export default function Home() {
             {categories.map((cat, idx) => (
               <CategoryItem key={cat.id} category={cat} index={idx} />
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* How It Works */}
+      <section className="py-20 bg-card/50">
+        <div className="container max-w-screen-xl px-4">
+          <div className="text-center mb-16">
+            <span className="text-primary font-bold uppercase tracking-widest text-sm">Simple & Fast</span>
+            <h2 className="text-3xl md:text-4xl font-heading font-bold mt-2">How It Works</h2>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-12 relative">
+            {/* Connector Line (Desktop only) */}
+            <div className="hidden md:block absolute top-8 left-[16%] right-[16%] h-0.5 bg-gradient-to-r from-transparent via-border to-transparent -z-10" />
+            
+            <ProcessStep 
+              number="01" 
+              title="Choose Your Meal" 
+              description="Browse our diverse menu of gourmet burgers, local favorites, and more." 
+            />
+            <ProcessStep 
+              number="02" 
+              title="Fast Checkout" 
+              description="Securely pay online or choose payment on delivery. It's that simple." 
+            />
+            <ProcessStep 
+              number="03" 
+              title="Track & Enjoy" 
+              description="Watch your rider arrive in real-time and enjoy your hot, fresh meal." 
+            />
+          </div>
+        </div>
+      </section>
+
+      {/* Chef's Special Feature */}
+      <section className="py-24 bg-background overflow-hidden">
+        <div className="container max-w-screen-xl px-4">
+          <div className="bg-card border border-border rounded-3xl overflow-hidden shadow-2xl">
+            <div className="grid grid-cols-1 lg:grid-cols-2">
+              <div className="relative h-[400px] lg:h-auto">
+                <img 
+                  src={chefSpecialImg} 
+                  alt="Chef's Special" 
+                  className="absolute inset-0 w-full h-full object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t lg:bg-gradient-to-r from-black/80 via-transparent to-transparent" />
+              </div>
+              <div className="p-8 md:p-12 flex flex-col justify-center space-y-6">
+                <div className="flex items-center gap-2 text-secondary font-bold uppercase tracking-wider text-sm">
+                  <Utensils className="h-4 w-4" /> Chef's Recommendation
+                </div>
+                <h2 className="text-3xl md:text-5xl font-heading font-bold leading-tight">
+                  The Royal Jollof Platter
+                </h2>
+                <p className="text-muted-foreground text-lg leading-relaxed">
+                  Experience the authentic taste of Nigeria with our signature smoky Jollof Rice, served with tender grilled turkey, fried plantains, and our secret spicy sauce. A meal fit for royalty.
+                </p>
+                <div className="flex flex-col sm:flex-row gap-4 pt-4">
+                  <Button size="lg" className="font-bold px-8 rounded-full" asChild>
+                    <Link href="/menu">Order This Dish - ₦4,500</Link>
+                  </Button>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -218,7 +298,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* App/Mobile Section (New Content) */}
+      {/* App/Mobile Section */}
       <section className="py-24 bg-card border-y border-border overflow-hidden">
         <div className="container max-w-screen-xl px-4">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
@@ -280,31 +360,41 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Features Grid */}
-      <section className="py-24 bg-background">
+      {/* Newsletter Section */}
+      <section className="py-20 bg-primary text-white">
         <div className="container max-w-screen-xl px-4">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <FeatureCard 
-              icon={Truck}
-              title="Lightning Fast Delivery"
-              description="Our dedicated fleet ensures your food arrives hot and fresh within 30-45 minutes of ordering."
-            />
-            <FeatureCard 
-              icon={ShieldCheck}
-              title="Hygiene Guaranteed"
-              description="We adhere to strict safety protocols. Sanitized kitchens, contactless delivery, and tamper-proof packaging."
-            />
-            <FeatureCard 
-              icon={Clock}
-              title="24/7 Support"
-              description="Have a question? Our support team is available round the clock to assist you with your orders."
-            />
+          <div className="flex flex-col md:flex-row items-center justify-between gap-8">
+            <div className="md:w-1/2 space-y-4">
+              <div className="flex items-center gap-2 text-black/60 font-bold uppercase text-sm">
+                <Gift className="h-5 w-5" /> Exclusive Deals
+              </div>
+              <h2 className="text-3xl md:text-4xl font-heading font-bold">
+                Get 15% Off Your First Order
+              </h2>
+              <p className="text-white/80 text-lg">
+                Subscribe to our newsletter to get special offers, free delivery codes, and menu updates.
+              </p>
+            </div>
+            <div className="md:w-1/2 w-full max-w-md">
+              <div className="flex gap-2">
+                <Input 
+                  placeholder="Enter your email" 
+                  className="bg-white/10 border-white/20 text-white placeholder:text-white/50 h-12 rounded-lg focus-visible:ring-white"
+                />
+                <Button variant="secondary" className="h-12 px-6 font-bold">
+                  Subscribe
+                </Button>
+              </div>
+              <p className="text-xs text-white/60 mt-2">
+                No spam. Unsubscribe anytime.
+              </p>
+            </div>
           </div>
         </div>
       </section>
 
       {/* Testimonials Carousel */}
-      <section className="py-24 bg-muted/20 border-t border-border">
+      <section className="py-24 bg-muted/20 border-b border-border">
         <div className="container max-w-screen-xl px-4 text-center">
           <span className="text-primary font-bold uppercase tracking-widest text-sm mb-4 block">Testimonials</span>
           <h2 className="text-3xl md:text-4xl font-heading font-bold mb-16">
