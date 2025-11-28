@@ -1,0 +1,376 @@
+🍽️ FULL RESTAURANT WEBSITE SPECIFICATION + UI/UX BLUEPRINT
+(Online Food Ordering + Paystack Payment + Modern, Clean UI)
+🌟 TOP REFERENCE WEBSITES FOR INSPIRATION
+
+These are global websites known for their outstanding UI/UX and online ordering flows:
+
+Dominos Pizza — Online Ordering UI
+https://www.dominos.com
+
+KFC (Global Website) — Clean Product Display
+https://global.kfc.com
+
+McDonald’s — Minimal and responsive
+https://www.mcdonalds.com
+
+Jumia Food Nigeria — Checkout & Order Flow
+https://food.jumia.com.ng
+
+Chowdeck — Simple and powerful food ordering UX
+https://chowdeck.com
+
+These will guide design patterns, responsiveness, menu layout, checkout flows, and ordering psychology.
+
+🏠 PAGE-BY-PAGE DESIGN & FEATURE BREAKDOWN
+
+Below is the complete structure for your restaurant website.
+
+1️⃣ HOME PAGE
+🎯 Goal: Sell food fast, make the user hungry immediately, reduce friction to ordering.
+Top UI/UX inspirations:
+
+KFC homepage layout
+
+Chowdeck color theme simplicity
+
+Dominos quick-order buttons
+
+📌 SECTIONS
+A. Hero Section
+
+Full-width high-quality food banner video/image
+
+Overlay headline:
+“Delicious Meals Delivered Hot & Fresh 🔥 Order Now!”
+
+A large “Order Food” CTA button that scrolls to menu section
+
+Design details:
+
+Use vibrant colors (deep red, orange, or dark theme with golden highlight)
+
+Add small movement animations (fade, slide-in)
+
+B. Quick Order Categories (3–6 items)
+
+Mini cards showing:
+
+Rice Meals
+
+Shawarma
+
+Burgers
+
+Grills
+
+Drinks
+
+Desserts
+
+Each card leads to the menu filtered by category.
+
+C. Popular Meals Carousel
+
+5–10 most ordered items
+
+Styled like Dominos “Best Sellers”
+
+Show:
+
+food image
+
+name
+
+rating stars
+
+“Add to Cart” button
+
+D. Why Choose Us Section
+
+3-4 icon blocks:
+
+Fast Delivery
+
+Fresh Ingredients
+
+Pocket Friendly
+
+Secure Payment (Powered by Paystack)
+
+E. Testimonials Section
+
+Cards with profile pics
+
+20–40 words reviews
+
+Inspired by McDonald’s customer stories layout
+
+F. Footer
+
+Contact info
+
+Opening hours
+
+Social links
+
+Map
+
+Newsletter signup
+
+2️⃣ MENU PAGE (MOST IMPORTANT PAGE)
+🎯 Goal: Clean, visually attractive food catalog with fast add-to-cart.
+UI Inspirations:
+
+Jumia Food product grid
+
+Chowdeck minimalist cards
+
+KFC product display
+
+📌 SECTIONS
+A. Category Sidebar (Optional for desktop)
+
+Fixed left sidebar
+
+Categories you defined
+
+Smooth highlight when scrolling
+
+B. Search Bar
+
+A fast search (by food name, tag, or ingredient)
+
+C. Food Product Grid
+
+Clean 3–4 column grid:
+
+Each product card shows:
+
+Food Image
+
+Name
+
+Short description
+
+Price
+
+Rating
+
+Small “Add to Cart” button
+
+Optional “Customize” (addons)
+
+D. Product Detail Modal (On click)
+
+Shows:
+
+Big image slider
+
+Description
+
+Ingredients
+
+Nutritional info
+
+Addons (e.g., extra chicken, cheese, drinks)
+
+Quantity selector
+
+Add to Cart button
+
+3️⃣ CART PAGE
+🎯 Goal: Smooth ordering experience with higher conversion.
+UI Inspirations:
+
+Dominos checkout
+
+Jumia Food cart
+
+Chowdeck checkout
+
+📌 SECTIONS
+A. Cart Items List
+
+For each item:
+
+thumbnail
+
+name
+
+quantity buttons
+
+addons
+
+price
+
+delete icon
+
+B. Order Summary
+
+Displays:
+
+Subtotal
+
+Delivery fee
+
+Discount
+
+VAT
+
+Total amount
+
+C. Delivery Options
+
+Radio buttons:
+
+Delivery 🚚
+
+Pickup 🥡
+
+D. Coupon Code Box
+
+(Optional)
+
+E. Checkout Button
+
+Large, fixed at bottom on mobile for conversion.
+
+4️⃣ CHECKOUT PAGE
+🎯 Goal: Fast, frictionless payment with Paystack.
+UI Inspirations:
+
+Paystack inline form
+
+Chowdeck address flow
+
+📌 SECTIONS
+A. Delivery Address Form
+
+Fields:
+
+Name
+
+Phone
+
+Address
+
+Landmark
+
+Delivery notes
+
+B. Payment Method Selector
+
+Paystack (preferred)
+
+Pay on Delivery (optional)
+
+C. Paystack Integration Flow
+
+When user chooses Paystack →
+The inline modal opens for:
+
+Card
+
+Bank Transfer
+
+USSD
+
+Mobile Money
+
+Paystack Wallet
+
+Bank Account Debit
+
+After payment:
+
+Redirect to ORDER SUCCESS PAGE
+
+5️⃣ ORDER SUCCESS PAGE
+
+Shows:
+
+“Order Successful 🎉”
+
+Order ID
+
+Estimated delivery time
+
+Button: Track Order
+
+6️⃣ ORDER TRACKING PAGE
+🎯 Goal: Improve trust and transparency.
+
+UI like a timeline:
+
+Order Received
+
+Being Prepared
+
+Out for Delivery
+
+Delivered
+
+(Optional map integration)
+
+7️⃣ ABOUT US PAGE
+🎯 Goal: Build authenticity and trust.
+
+Sections:
+
+Restaurant story
+
+Mission & values
+
+Chef introduction
+
+Team photos
+
+Awards
+
+Hygiene certifications
+
+8️⃣ CONTACT PAGE
+
+Sections:
+
+Contact form
+
+Phone numbers
+
+Email
+
+Opening hours
+
+Google map embed
+
+💡 UI/UX DESIGN PRINCIPLES FOR A WORLD-CLASS FOOD ORDERING SITE
+✔ High-quality food images
+✔ No clutter — clean minimal layout
+✔ Clear CTAs (Order Now, Add to Cart)
+✔ Menu accessible from anywhere
+✔ Large text & buttons for mobile users
+✔ Sticky cart on mobile
+✔ Reassurance tags:
+
+“Secure Payment with Paystack”
+
+“30–45 minutes delivery timing”
+
+“Freshly Prepared”
+
+🎨 COLOR PALETTES RECOMMENDATION
+Option 1: Dark + Red (Premium Feel)
+
+#121212 (Dark background)
+
+#E63946 (Food red)
+
+#FFB703 (Golden highlights)
+
+Option 2: White + Orange (Fresh & Friendly)
+
+#FFFFFF
+
+#FB8500
+
+#1D3557
