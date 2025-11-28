@@ -2,9 +2,10 @@ import { Layout } from "@/components/layout";
 import { FoodCard } from "@/components/ui-custom";
 import { categories, products } from "@/lib/data";
 import { useState } from "react";
-import { Search } from "lucide-react";
+import { Search, Filter, X } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { Sheet, SheetContent, SheetTrigger, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
 import { useLocation } from "wouter";
 
@@ -15,6 +16,7 @@ export default function Menu() {
 
   const [activeCategory, setActiveCategory] = useState(initialCategory);
   const [searchQuery, setSearchQuery] = useState("");
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
 
   const filteredProducts = products.filter(product => {
     const matchesCategory = activeCategory === "all" || product.category === activeCategory;
@@ -22,6 +24,38 @@ export default function Menu() {
                           product.description.toLowerCase().includes(searchQuery.toLowerCase());
     return matchesCategory && matchesSearch;
   });
+
+  const CategoryList = ({ mobile = false }) => (
+    <div className={cn("space-y-1", mobile ? "mt-4" : "")}>
+      {!mobile && <h3 className="font-heading font-bold text-lg mb-3 px-2">Categories</h3>}
+      <Button
+        variant={activeCategory === "all" ? "default" : "ghost"}
+        className="w-full justify-start"
+        onClick={() => {
+          setActiveCategory("all");
+          if(mobile) setIsFilterOpen(false);
+        }}
+      >
+        All Items
+      </Button>
+      {categories.map(cat => (
+        <Button
+          key={cat.id}
+          variant={activeCategory === cat.id ? "default" : "ghost"}
+          className={cn(
+            "w-full justify-start",
+            activeCategory === cat.id && "bg-primary text-primary-foreground"
+          )}
+          onClick={() => {
+            setActiveCategory(cat.id);
+            if(mobile) setIsFilterOpen(false);
+          }}
+        >
+          {cat.name}
+        </Button>
+      ))}
+    </div>
+  );
 
   return (
     <Layout>
@@ -34,10 +68,10 @@ export default function Menu() {
         </div>
       </div>
 
-      <div className="container max-w-screen-xl px-4 py-12">
+      <div className="container max-w-screen-xl px-4 py-8 md:py-12">
         <div className="flex flex-col md:flex-row gap-8">
-          {/* Sidebar / Category Filter */}
-          <aside className="w-full md:w-64 shrink-0 space-y-8">
+          {/* Desktop Sidebar */}
+          <aside className="hidden md:block w-64 shrink-0 space-y-8">
             <div className="sticky top-24 space-y-6">
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -48,32 +82,35 @@ export default function Menu() {
                   onChange={(e) => setSearchQuery(e.target.value)}
                 />
               </div>
-
-              <div className="space-y-1">
-                <h3 className="font-heading font-bold text-lg mb-3 px-2">Categories</h3>
-                <Button
-                  variant={activeCategory === "all" ? "default" : "ghost"}
-                  className="w-full justify-start"
-                  onClick={() => setActiveCategory("all")}
-                >
-                  All Items
-                </Button>
-                {categories.map(cat => (
-                  <Button
-                    key={cat.id}
-                    variant={activeCategory === cat.id ? "default" : "ghost"}
-                    className={cn(
-                      "w-full justify-start",
-                      activeCategory === cat.id && "bg-primary text-primary-foreground"
-                    )}
-                    onClick={() => setActiveCategory(cat.id)}
-                  >
-                    {cat.name}
-                  </Button>
-                ))}
-              </div>
+              <CategoryList />
             </div>
           </aside>
+
+          {/* Mobile Controls */}
+          <div className="md:hidden flex gap-4 sticky top-20 z-30 bg-background/95 backdrop-blur p-2 -mx-2 rounded-lg border-b border-border mb-6">
+             <div className="relative flex-1">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                <Input 
+                  placeholder="Search..." 
+                  className="pl-9 bg-card h-10"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                />
+              </div>
+              <Sheet open={isFilterOpen} onOpenChange={setIsFilterOpen}>
+                <SheetTrigger asChild>
+                  <Button variant="outline" size="icon" className="h-10 w-10 shrink-0">
+                    <Filter className="h-4 w-4" />
+                  </Button>
+                </SheetTrigger>
+                <SheetContent side="left">
+                  <SheetHeader>
+                    <SheetTitle className="text-left font-heading">Menu Categories</SheetTitle>
+                  </SheetHeader>
+                  <CategoryList mobile />
+                </SheetContent>
+              </Sheet>
+          </div>
 
           {/* Product Grid */}
           <div className="flex-1">
@@ -85,6 +122,9 @@ export default function Menu() {
               </div>
             ) : (
               <div className="text-center py-20">
+                <div className="w-16 h-16 bg-muted rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Search className="h-8 w-8 text-muted-foreground" />
+                </div>
                 <p className="text-muted-foreground text-lg">No food items found matching your criteria.</p>
                 <Button 
                   variant="link" 

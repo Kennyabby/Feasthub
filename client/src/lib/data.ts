@@ -3,14 +3,22 @@ import pizzaImg from '@assets/stock_images/pepperoni_pizza_dark_2f5fb716.jpg';
 import shawarmaImg from '@assets/stock_images/chicken_shawarma_wra_9f0ec0d2.jpg';
 import riceImg from '@assets/stock_images/jollof_rice_with_gri_6e3baba3.jpg';
 import wingsImg from '@assets/stock_images/grilled_bbq_chicken__415af449.jpg';
+import cakeImg from '@assets/stock_images/decadent_chocolate_c_70a0eee6.jpg';
+import milkshakeImg from '@assets/stock_images/strawberry_milkshake_87b3d89a.jpg';
+import pastaImg from '@assets/stock_images/creamy_pasta_carbona_2c0405fb.jpg';
+import saladImg from '@assets/stock_images/fresh_greek_salad_bo_836b1f50.jpg';
+import cocktailImg from '@assets/stock_images/cocktail_drink_glass_696ec9f0.jpg';
+import plantainImg from '@assets/stock_images/plate_of_fried_plant_c4f199cf.jpg';
 
 export const categories = [
   { id: "rice", name: "Rice Meals", image: riceImg },
   { id: "shawarma", name: "Shawarma", image: shawarmaImg },
   { id: "burgers", name: "Burgers", image: burgerImg },
   { id: "grills", name: "Grills", image: wingsImg },
-  { id: "drinks", name: "Drinks", image: "https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?auto=format&fit=crop&w=500&q=80" },
-  { id: "desserts", name: "Desserts", image: "https://images.unsplash.com/photo-1563729784474-d77dbb933a9e?auto=format&fit=crop&w=500&q=80" },
+  { id: "pasta", name: "Pasta", image: pastaImg },
+  { id: "sides", name: "Sides", image: plantainImg },
+  { id: "drinks", name: "Drinks", image: cocktailImg },
+  { id: "desserts", name: "Desserts", image: cakeImg },
 ];
 
 export const products = [
@@ -92,6 +100,66 @@ export const products = [
     rating: 4.4,
     category: "rice",
     image: "https://images.unsplash.com/photo-1603133872878-684f208fb84b?auto=format&fit=crop&w=800&q=80",
+    popular: false,
+  },
+  {
+    id: 9,
+    name: "Creamy Carbonara",
+    description: "Italian pasta with rich creamy sauce, bacon bits, and parmesan cheese.",
+    price: 5500,
+    rating: 4.7,
+    category: "pasta",
+    image: pastaImg,
+    popular: true,
+  },
+  {
+    id: 10,
+    name: "Fried Plantain (Dodo)",
+    description: "Sweet ripe plantains fried to golden perfection.",
+    price: 1000,
+    rating: 4.8,
+    category: "sides",
+    image: plantainImg,
+    popular: true,
+  },
+  {
+    id: 11,
+    name: "Greek Salad",
+    description: "Fresh cucumbers, tomatoes, olives, and feta cheese with olive oil dressing.",
+    price: 3500,
+    rating: 4.5,
+    category: "sides",
+    image: saladImg,
+    popular: false,
+  },
+  {
+    id: 12,
+    name: "Decadent Chocolate Cake",
+    description: "Rich, moist chocolate cake layered with ganache.",
+    price: 3000,
+    rating: 4.9,
+    category: "desserts",
+    image: cakeImg,
+    popular: true,
+  },
+  {
+    id: 13,
+    name: "Strawberry Milkshake",
+    description: "Made with real strawberries and premium vanilla ice cream.",
+    price: 2800,
+    rating: 4.6,
+    category: "drinks",
+    image: milkshakeImg,
+    popular: false,
+  },
+  {
+    id: 14,
+    name: "Sunset Cocktail",
+    description: "Refreshing blend of tropical juices with a splash of grenadine (Non-alcoholic).",
+    price: 2000,
+    rating: 4.7,
+    category: "drinks",
+    image: cocktailImg,
     popular: false,
   },
 ];
