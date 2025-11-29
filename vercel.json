@@ -4,12 +4,10 @@
     {
       "src": "server/index.ts",
       "use": "@vercel/node",
-      "config": {
-        "tsc": false
-      }
+      "config": { "tsc": false }
     },
     {
-      "src": "vite.config.ts",
+      "src": "package.json",
       "use": "@vercel/static-build"
     }
   ],
