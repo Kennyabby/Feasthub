@@ -94,3 +94,7 @@ app.use((req, res, next) => {
     },
   );
 })();
+
+export async function createApp() {
+  return { app, httpServer };
+}
