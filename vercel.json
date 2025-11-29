@@ -1,24 +1,16 @@
 {
   "version": 2,
-  "name": "Feasthub",
-  "regions": ["cdg1"],
-  "functions": {
-    "api/**/*": {
-      "includeFiles": "{server/**,dist/**}",
-      "maxDuration": 60,
-      "memory": 1024
-    }
-  },
-  "buildCommand": "npm run build",
-  "outputDirectory": "dist/public",
-  "rewrites": [
-    { "source": "/api/(.*)", "destination": "/api/index?path=$1" },
-    { "source": "/((?!api/).*)", "destination": "/index.html" }
-  ],
-  "crons": [
+  "name": "enterprisecompute",
+  "builds": [{ "src": "index.js", "use": "@vercel/node" }],
+  "routes": [
     {
-      "path": "/api/cron/purge-sessions",
-      "schedule": "0 3 * * *"
+      "src": "/(.*)",
+      "dest": "/index.js",
+      "headers": {
+        "Access-Control-Allow-Origin": "https://enterprisecompute.vercel.app",
+        "Access-Control-Allow-Methods": "GET,OPTIONS,PATCH,DELETE,POST,PUT",
+        "Access-Control-Allow-Credentials": "true"
+      } 
     }
   ]
 }
