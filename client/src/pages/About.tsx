@@ -3,29 +3,13 @@ import { FeatureCard } from "@/components/ui-custom";
 import { Users, Award, Leaf, MapPin, ChefHat, UtensilsCrossed, History } from "lucide-react";
 import { motion } from "framer-motion";
 
-// Import downloaded images (assuming they will be downloaded by the parallel tool call)
-// If not, we'll use placeholders or the ones we just requested
-import chefTeamImg from '@assets/stock_images/professional_restaur_20b96f94.jpg';
-import awardImg from '@assets/stock_images/restaurant_award_cer_213cee3d.jpg';
-import ecoImg from '@assets/stock_images/eco_friendly_food_pa_28423af0.jpg';
-import interiorImg from '@assets/stock_images/restaurant_interior__4c194c6a.jpg';
-import freshImg from '@assets/stock_images/fresh_organic_vegeta_25d7111c.jpg';
-import customersImg from '@assets/stock_images/happy_customers_eati_ce18fe7b.jpg';
-
 
 export default function About() {
   return (
     <Layout>
       {/* Hero Section */}
-      <section className="relative h-[50vh] min-h-[400px] w-full overflow-hidden flex items-center justify-center">
-        <div className="absolute inset-0 z-0">
-          <img 
-            src={interiorImg} 
-            alt="Restaurant Interior" 
-            className="w-full h-full object-cover"
-          />
-          <div className="absolute inset-0 bg-black/70 backdrop-blur-[2px]" />
-        </div>
+      <section className="relative h-[50vh] min-h-[400px] w-full overflow-hidden flex items-center justify-center bg-gradient-to-br from-primary/40 via-black to-secondary/40">
+        <div className="absolute inset-0 z-0 opacity-40 bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.12),transparent_60%),radial-gradient(circle_at_bottom,rgba(255,255,255,0.08),transparent_55%)]" />
         <div className="relative z-10 container text-center px-4">
           <motion.h1 
             initial={{ opacity: 0, y: 30 }}
@@ -41,7 +25,7 @@ export default function About() {
             transition={{ duration: 0.8, delay: 0.2 }}
             className="text-xl md:text-2xl text-gray-300 max-w-2xl mx-auto font-light"
           >
-            Redefining the art of food delivery with passion, quality, and speed.
+            The story of a Port Harcourt hangout where good food and great music meet.
           </motion.p>
         </div>
       </section>
@@ -56,14 +40,16 @@ export default function About() {
               viewport={{ once: true }}
               transition={{ duration: 0.6 }}
             >
-              <div className="relative">
-                <img 
-                  src={chefTeamImg} 
-                  alt="Our Chefs" 
-                  className="rounded-2xl shadow-2xl border border-white/10 relative z-10"
-                />
-                <div className="absolute -bottom-6 -right-6 w-2/3 h-2/3 bg-primary/20 rounded-2xl -z-0 hidden md:block"></div>
-                <div className="absolute -top-6 -left-6 w-2/3 h-2/3 bg-secondary/10 rounded-2xl -z-0 hidden md:block"></div>
+              <div className="relative bg-card border border-border rounded-2xl p-8 shadow-2xl space-y-4">
+                <div className="inline-flex items-center gap-2 text-primary text-sm font-semibold uppercase tracking-widest">
+                  <ChefHat className="h-5 w-5" /> The Plantain Planet Kitchen
+                </div>
+                <p className="text-muted-foreground text-base leading-relaxed">
+                  From weekday lunches to late-night lounge service, our kitchen focuses on the kind of food Port Harcourt people actually crave: assorted, chicken, pepper soup, swallows, rich soups, nutritious proteins, and chilled bar drinks.
+                </p>
+                <p className="text-muted-foreground text-base leading-relaxed">
+                  Every plate is designed to pair perfectly with cold beers, spirits, malt, Hollandia, Chi Exotic, and other refreshments from our bar and VIP sections.
+                </p>
               </div>
             </motion.div>
             
@@ -81,10 +67,10 @@ export default function About() {
               
               <div className="space-y-6 text-lg text-muted-foreground leading-relaxed">
                 <p>
-                  Founded in 2024, Crave started with a simple mission: to prove that "fast food" doesn't have to mean "compromised quality". We noticed a gap in the market for meals that are delivered quickly but prepared with the care of fine dining.
+                  The Plantain Planet is a neighborhood restaurant, VIP lounge, and open bar created for people who love good Nigerian food, cold drinks, and relaxed nights out with friends.
                 </p>
                 <p>
-                  Our kitchen is led by Executive Chef Michael Okon, who brings over 15 years of culinary expertise from top restaurants across Lagos and London. He believes that every dish tells a story, and we're here to share that story with you.
+                  From rich rice dishes and grills to sharable bar snacks and cocktails, we focus on simple, satisfying meals made to enjoy on-site at our Port Harcourt location.
                 </p>
               </div>
 
@@ -133,7 +119,7 @@ export default function About() {
         </div>
       </section>
 
-      {/* Fresh Ingredients Section */}
+      {/* Plantain Planet Food & Drinks Section */}
       <section className="py-20 bg-background overflow-hidden">
         <div className="container max-w-screen-xl px-4">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
@@ -145,31 +131,31 @@ export default function About() {
               className="order-2 lg:order-1 space-y-8"
             >
               <div>
-                <h2 className="text-sm font-bold text-secondary uppercase tracking-widest mb-2">Farm to Table</h2>
-                <h3 className="text-3xl md:text-4xl font-heading font-bold text-foreground">Freshness You Can Taste</h3>
+                <h2 className="text-sm font-bold text-secondary uppercase tracking-widest mb-2">What We Serve</h2>
+                <h3 className="text-3xl md:text-4xl font-heading font-bold text-foreground">Food and drinks the Port Harcourt way</h3>
               </div>
               
               <div className="space-y-6 text-lg text-muted-foreground leading-relaxed">
                 <p>
-                  Great food starts with great ingredients. That's why we've partnered with over 20 local farms to source our vegetables, poultry, and spices directly.
+                  At The Plantain Planet, the focus is on comforting Nigerian meals and lounge bites you can actually enjoy in Port Harcourt – jollof and fried rice, swallows with rich soups, grilled meats, and sharable plates for the table.
                 </p>
                 <p>
-                  We receive fresh deliveries every morning. No frozen patties, no preservatives, just honest, real food prepared fresh daily. Our "Zero-Freezer" policy for vegetables ensures you get maximum nutrition and flavor in every bite.
+                  Everything is prepared fresh from our kitchen and bar so you can relax, eat, and sip without worrying about delivery apps or third-party menus. What you see on this website is what you can order on ground at Ozuoba / Rumuosi.
                 </p>
               </div>
 
               <ul className="space-y-4 pt-4">
                 <li className="flex items-center gap-3">
                   <div className="bg-green-500/20 p-2 rounded-full text-green-500"><Leaf className="h-5 w-5" /></div>
-                  <span className="font-medium">100% Organic Vegetables</span>
+                  <span className="font-medium">Rice specials, swallows, and Port Harcourt soups</span>
                 </li>
                 <li className="flex items-center gap-3">
                   <div className="bg-green-500/20 p-2 rounded-full text-green-500"><UtensilsCrossed className="h-5 w-5" /></div>
-                  <span className="font-medium">Antibiotic-Free Poultry</span>
+                  <span className="font-medium">Grilled proteins, peppered meats, and bar snacks</span>
                 </li>
                 <li className="flex items-center gap-3">
                   <div className="bg-green-500/20 p-2 rounded-full text-green-500"><History className="h-5 w-5" /></div>
-                  <span className="font-medium">Sourced Daily, Never Frozen</span>
+                  <span className="font-medium">Cold beers, spirits, malt, Hollandia, Chi Exotic, and soft drinks</span>
                 </li>
               </ul>
             </motion.div>
@@ -182,16 +168,16 @@ export default function About() {
               className="order-1 lg:order-2 relative"
             >
               <div className="grid grid-cols-2 gap-4">
-                <img 
-                  src={freshImg} 
-                  alt="Fresh Ingredients" 
-                  className="rounded-2xl shadow-lg w-full h-64 object-cover transform translate-y-8"
-                />
-                 <img 
-                  src={ecoImg} 
-                  alt="Eco Packaging" 
-                  className="rounded-2xl shadow-lg w-full h-64 object-cover"
-                />
+                <div className="rounded-2xl shadow-lg w-full h-64 bg-gradient-to-br from-primary/40 via-background to-secondary/30 flex items-center justify-center text-center px-4">
+                  <p className="text-sm md:text-base text-white/90 font-medium">
+                    Signature Port Harcourt pots simmering with native soups, seafood, and assorted meats.
+                  </p>
+                </div>
+                <div className="rounded-2xl shadow-lg w-full h-64 bg-gradient-to-br from-secondary/40 via-background to-primary/30 flex items-center justify-center text-center px-4">
+                  <p className="text-sm md:text-base text-white/90 font-medium">
+                    Chilled drinks on ice: beers, spirits, cocktails, malt, Hollandia, Chi Exotic, and more.
+                  </p>
+                </div>
               </div>
             </motion.div>
           </div>
@@ -201,20 +187,26 @@ export default function About() {
       {/* Team/Gallery Strip */}
       <section className="py-20 bg-card border-t border-border">
         <div className="container max-w-screen-xl px-4 text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-heading font-bold mb-4">Life at Crave</h2>
-          <p className="text-muted-foreground">Peek behind the scenes of our kitchen and culture.</p>
+          <h2 className="text-3xl md:text-4xl font-heading font-bold mb-4">Life at The Plantain Planet</h2>
+          <p className="text-muted-foreground">A glimpse into our restaurant, VIP lounge, and open bar experience.</p>
         </div>
         
         {/* Simple masonry-style gallery using flex/grid */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 px-4 max-w-screen-2xl mx-auto">
-          <div className="h-64 md:h-80 rounded-xl overflow-hidden">
-            <img src={chefTeamImg} className="w-full h-full object-cover hover:scale-110 transition-transform duration-700" alt="Team" />
+          <div className="h-64 md:h-80 rounded-xl overflow-hidden bg-gradient-to-br from-primary/40 via-background to-secondary/40 flex items-center justify-center px-4 text-center">
+            <p className="text-white/90 text-sm md:text-base font-medium">
+              After-work chill spots with music, football on screen, and easy access to food and drinks.
+            </p>
           </div>
-          <div className="h-64 md:h-80 rounded-xl overflow-hidden md:col-span-2">
-            <img src={customersImg} className="w-full h-full object-cover hover:scale-110 transition-transform duration-700" alt="Customers" />
+          <div className="h-64 md:h-80 rounded-xl overflow-hidden md:col-span-2 bg-gradient-to-br from-secondary/40 via-background to-primary/40 flex items-center justify-center px-4 text-center">
+            <p className="text-white/90 text-sm md:text-base font-medium">
+              Friends and colleagues gathering for birthdays, link-ups, and game nights in Port Harcourt.
+            </p>
           </div>
-          <div className="h-64 md:h-80 rounded-xl overflow-hidden">
-            <img src={awardImg} className="w-full h-full object-cover hover:scale-110 transition-transform duration-700" alt="Award" />
+          <div className="h-64 md:h-80 rounded-xl overflow-hidden bg-gradient-to-br from-primary/30 via-background to-secondary/30 flex items-center justify-center px-4 text-center">
+            <p className="text-white/90 text-sm md:text-base font-medium">
+              VIP lounge and room service for guests who want a more private "The Plantain Planet" experience.
+            </p>
           </div>
         </div>
       </section>

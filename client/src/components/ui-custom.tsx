@@ -21,29 +21,32 @@ export function HeroSection({
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   useEffect(() => {
+    if (!images || images.length === 0) return;
     const interval = setInterval(() => {
       setCurrentImageIndex((prev) => (prev + 1) % images.length);
     }, 5000);
     return () => clearInterval(interval);
-  }, [images.length]);
+  }, [images]);
 
   return (
     <section className="relative h-[90vh] min-h-[600px] w-full overflow-hidden flex items-center">
-      {/* Background Image Slider */}
+      {/* Background */}
       <div className="absolute inset-0 z-0">
-        <AnimatePresence mode="popLayout">
-          <motion.img 
-            key={currentImageIndex}
-            src={images[currentImageIndex]} 
-            alt="Hero Food" 
-            initial={{ opacity: 0, scale: 1.1 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 1.5, ease: "easeOut" }}
-            className="absolute inset-0 w-full h-full object-cover"
-          />
-        </AnimatePresence>
-        <div className="absolute inset-0 bg-gradient-to-r from-black/95 via-black/70 to-transparent/20" />
+        {images && images.length > 0 && (
+          <AnimatePresence mode="popLayout">
+            <motion.img 
+              key={currentImageIndex}
+              src={images[currentImageIndex]} 
+              alt="Hero Food" 
+              initial={{ opacity: 0, scale: 1.1 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 1.5, ease: "easeOut" }}
+              className="absolute inset-0 w-full h-full object-cover"
+            />
+          </AnimatePresence>
+        )}
+        <div className="absolute inset-0 bg-gradient-to-r from-black/95 via-black/80 to-black/60" />
       </div>
 
       <div className="container relative z-10 px-4 max-w-screen-xl">
@@ -51,14 +54,14 @@ export function HeroSection({
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2 }}
-          className="max-w-2xl space-y-8"
+          className="max-w-2xl space-y-8 py-6 md:py-10"
         >
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/20 border border-primary/30 text-primary text-sm font-bold uppercase tracking-wider">
+          <div className="inline-flex items-center gap-2 px-3 py-1 mb-3 md:mb-4 rounded-full bg-primary/20 border border-primary/30 text-primary text-sm font-bold uppercase tracking-wider">
             <span className="relative flex h-2 w-2">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
               <span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
             </span>
-            Taking Orders Now
+            Now Serving at The Plantain Planet
           </div>
           
           <h1 className="text-5xl md:text-7xl lg:text-8xl font-heading font-bold text-white leading-[0.9] text-glow">
@@ -82,14 +85,14 @@ export function HeroSection({
             </Button>
           </div>
           
-          <div className="pt-8 flex items-center gap-8 text-sm text-gray-400 font-medium">
+          <div className="pt-8 pb-4 md:pb-6 flex items-center gap-8 text-sm text-gray-400 font-medium">
             <div className="flex items-center gap-2">
               <Clock className="h-5 w-5 text-primary" />
-              <span>30-45 min Delivery</span>
+              <span>Chilled drinks & hot grills</span>
             </div>
             <div className="flex items-center gap-2">
               <Star className="h-5 w-5 text-secondary fill-secondary" />
-              <span>4.9/5 Rating</span>
+              <span>The Plantain Planet favorites</span>
             </div>
           </div>
         </motion.div>
@@ -99,7 +102,15 @@ export function HeroSection({
 }
 
 // Food Product Card
-export function FoodCard({ product }: { product: any }) {
+export function FoodCard({
+  product,
+  showBothPrices = false,
+  priceType,
+}: {
+  product: any;
+  showBothPrices?: boolean;
+  priceType?: "normal" | "vip";
+}) {
   const { addToCart } = useCart();
 
   return (
@@ -138,18 +149,39 @@ export function FoodCard({ product }: { product: any }) {
         </p>
 
         <div className="flex items-center justify-between pt-2">
-          <span className="text-lg font-bold text-primary">
-            ₦{product.price.toLocaleString()}
-          </span>
+          <div className="flex flex-col items-start">
+            {showBothPrices ? (
+              <>
+                <span className="text-xs text-muted-foreground">Regular</span>
+                <span className="text-lg font-bold text-primary">
+                  ₦{Number(product.salesPrice ?? product.price).toLocaleString()}
+                </span>
+                {product.vipPrice !== undefined && Number(product.vipPrice) > 0 && (
+                  <div className="mt-1">
+                    <span className="text-xs text-muted-foreground">VIP</span>
+                    <div className="text-sm font-semibold text-secondary">
+                      ₦{Number(product.vipPrice).toLocaleString()}
+                    </div>
+                  </div>
+                )}
+              </>
+            ) : (
+              <>
+                <span className="text-xs text-muted-foreground">
+                  {priceType === "vip" ? "VIP Price" : "Regular Price"}
+                </span>
+                <span className="text-lg font-bold text-primary">
+                  ₦{Number(product.price).toLocaleString()}
+                </span>
+              </>
+            )}
+          </div>
           <Button 
             size="sm" 
-            className="rounded-full bg-white text-black hover:bg-primary hover:text-white transition-colors"
-            onClick={(e) => {
-              e.preventDefault();
-              addToCart(product);
-            }}
+            className="rounded-full bg-muted text-muted-foreground cursor-not-allowed"
+            disabled
           >
-            <Plus className="h-4 w-4 mr-1" /> Add
+            IN-STOCK
           </Button>
         </div>
       </div>

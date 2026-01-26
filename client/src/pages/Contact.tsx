@@ -11,7 +11,6 @@ import {
 } from "@/components/ui/accordion";
 
 import supportImg from '@assets/stock_images/customer_support_tea_27c2ff04.jpg';
-import mapImg from '@assets/stock_images/city_map_top_view_fo_d699b8e8.jpg';
 
 export default function Contact() {
   return (
@@ -21,7 +20,7 @@ export default function Contact() {
         <div className="container max-w-screen-xl px-4 text-center">
           <h1 className="text-4xl md:text-6xl font-heading font-bold mb-6">Get in Touch</h1>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-            We're here to help. Chat with our friendly team 24/7.
+            Reach out to The Plantain Planet team for reservations, events, or general enquiries.
           </p>
         </div>
       </div>
@@ -38,8 +37,8 @@ export default function Contact() {
                     <MapPin className="h-6 w-6" />
                   </div>
                   <div>
-                    <h3 className="font-bold text-lg mb-1">Head Office</h3>
-                    <p className="text-muted-foreground text-sm">123 Gourmet Street,<br />Victoria Island, Lagos, Nigeria</p>
+                    <h3 className="font-bold text-lg mb-1">Restaurant & Lounge Location</h3>
+                    <p className="text-muted-foreground text-sm">The Plantain Planet • Ozuoba / Rumuosi, Port Harcourt,<br />Rivers State, Nigeria (easily spotted on Google Maps)</p>
                   </div>
                 </div>
                 
@@ -49,7 +48,7 @@ export default function Contact() {
                   </div>
                   <div>
                     <h3 className="font-bold text-lg mb-1">Phone</h3>
-                    <p className="text-muted-foreground text-sm">+234 800 CRAVE FOOD<br />+234 801 234 5678</p>
+                    <p className="text-muted-foreground text-sm">08037044942</p>
                   </div>
                 </div>
 
@@ -59,7 +58,7 @@ export default function Contact() {
                   </div>
                   <div>
                     <h3 className="font-bold text-lg mb-1">Email</h3>
-                    <p className="text-muted-foreground text-sm">support@crave.com<br />partnerships@crave.com</p>
+                    <p className="text-muted-foreground text-sm">theplantainplanet22@gmail.com</p>
                   </div>
                 </div>
 
@@ -69,22 +68,46 @@ export default function Contact() {
                   </div>
                   <div>
                     <h3 className="font-bold text-lg mb-1">Working Hours</h3>
-                    <p className="text-muted-foreground text-sm">Mon - Fri: 8am - 10pm<br />Sat - Sun: 10am - 11pm</p>
+                    <p className="text-muted-foreground text-sm">Mon - Fri: 8am - 11pm<br />Sat - Sun: 10am - 11pm</p>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-4">
+                  <div className="bg-primary/10 p-3 rounded-full text-primary shrink-0">
+                    <MessageCircle className="h-6 w-6" />
+                  </div>
+                  <div>
+                    <h3 className="font-bold text-lg mb-1">WhatsApp</h3>
+                    <p className="text-muted-foreground text-sm mb-2">
+                      Prefer chatting? Reach the Plantain Planet team directly on WhatsApp.
+                    </p>
+                    <a
+                      href="https://wa.me/2348037044942?text=Hello%20Plantain%20Planet%2C%20I%27d%20like%20to%20make%20an%20enquiry."
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <Button size="sm" variant="outline" className="inline-flex items-center gap-2">
+                        Chat on WhatsApp
+                        <MessageCircle className="h-4 w-4" />
+                      </Button>
+                    </a>
                   </div>
                 </div>
               </div>
             </div>
 
-            {/* Mini Map */}
+            {/* Google Maps Embed */}
             <div className="rounded-2xl overflow-hidden border border-border h-[250px] relative">
-              <img src={mapImg} alt="Location Map" className="w-full h-full object-cover opacity-60 grayscale" />
-              <div className="absolute inset-0 flex items-center justify-center">
-                 <div className="bg-primary text-white p-2 rounded-full shadow-lg animate-bounce">
-                   <MapPin className="h-6 w-6" />
-                 </div>
-              </div>
-              <div className="absolute bottom-4 left-4 bg-background/90 backdrop-blur px-3 py-1 rounded text-xs font-bold shadow-sm">
-                Victoria Island
+              <iframe
+                title="Plantain Planet Location Map"
+                src="https://www.google.com/maps?q=Plantain+Planet+Ozuoba+Rumuosi+Port+Harcourt+Nigeria&output=embed"
+                className="w-full h-full border-0"
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+              />
+              <div className="absolute bottom-4 left-4 bg-background/90 backdrop-blur px-3 py-1 rounded text-xs font-bold shadow-sm flex items-center gap-2">
+                <MapPin className="h-3 w-3 text-primary" />
+                <span>The Plantain Planet • Ozuoba / Rumuosi, Port Harcourt, Rivers</span>
               </div>
             </div>
           </div>
@@ -100,7 +123,7 @@ export default function Contact() {
                     <img src={supportImg} alt="Support Team" className="w-16 h-16 rounded-full object-cover border-2 border-primary" />
                     <div>
                       <h2 className="text-2xl font-bold">Send us a message</h2>
-                      <p className="text-muted-foreground">We typically reply within 2 hours.</p>
+                      <p className="text-muted-foreground">Our team will respond to you as soon as possible.</p>
                     </div>
                   </div>
                   
@@ -117,8 +140,8 @@ export default function Contact() {
                     </div>
                     
                     <div className="space-y-2">
-                      <label className="text-sm font-medium">Email</label>
-                      <Input type="email" placeholder="john@example.com" className="bg-background h-12" />
+                      <label className="text-sm font-medium">Phone</label>
+                      <Input type="text" placeholder="+234 8001 234 790" className="bg-background h-12" />
                     </div>
 
                     <div className="space-y-2">
@@ -147,26 +170,26 @@ export default function Contact() {
                <HelpCircle className="h-6 w-6 text-muted-foreground" />
              </div>
              <h2 className="text-3xl md:text-4xl font-heading font-bold mb-4">Frequently Asked Questions</h2>
-             <p className="text-muted-foreground">Find quick answers to common questions about our service.</p>
+             <p className="text-muted-foreground">Find quick answers to common questions about visiting The Plantain Planet, booking rooms, and enjoying our food and drinks.</p>
            </div>
 
            <Accordion type="single" collapsible className="w-full space-y-4">
             <AccordionItem value="item-1" className="border border-border rounded-xl px-6 bg-card">
-              <AccordionTrigger className="hover:no-underline text-lg font-bold">How long does delivery take?</AccordionTrigger>
+              <AccordionTrigger className="hover:no-underline text-lg font-bold">Do you offer food delivery or an app?</AccordionTrigger>
               <AccordionContent className="text-muted-foreground text-base leading-relaxed">
-                We aim to deliver all orders within 30-45 minutes, depending on your location and the current traffic conditions. You can track your order in real-time on our app.
+                For now, The Plantain Planet focuses on on-site restaurant and lounge service in Port Harcourt, Rivers. The website is the single official place for our menu, room information, and updates but there is no mobile app yet.
               </AccordionContent>
             </AccordionItem>
             <AccordionItem value="item-2" className="border border-border rounded-xl px-6 bg-card">
               <AccordionTrigger className="hover:no-underline text-lg font-bold">What payment methods do you accept?</AccordionTrigger>
               <AccordionContent className="text-muted-foreground text-base leading-relaxed">
-                We accept all major debit/credit cards, bank transfers, and USSD payments through our secure payment partner, Paystack.
+                We accept all major debit/credit cards, bank transfers, and USSD payments through our secure POS payment machine.
               </AccordionContent>
             </AccordionItem>
             <AccordionItem value="item-3" className="border border-border rounded-xl px-6 bg-card">
-              <AccordionTrigger className="hover:no-underline text-lg font-bold">Do you offer contactless delivery?</AccordionTrigger>
+              <AccordionTrigger className="hover:no-underline text-lg font-bold">Do you have rooms and accommodation?</AccordionTrigger>
               <AccordionContent className="text-muted-foreground text-base leading-relaxed">
-                Yes! You can request contactless delivery at checkout. Our rider will leave your order at your doorstep and notify you.
+                Yes. The Plantain Planet also operates a lounge with accommodation. We offer different room types and price points, plus dedicated room service for food and drinks ordered to your room.
               </AccordionContent>
             </AccordionItem>
             <AccordionItem value="item-4" className="border border-border rounded-xl px-6 bg-card">
