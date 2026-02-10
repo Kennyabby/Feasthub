@@ -48,7 +48,7 @@ export default function Contact() {
                   </div>
                   <div>
                     <h3 className="font-bold text-lg mb-1">Phone</h3>
-                    <p className="text-muted-foreground text-sm">08037044942</p>
+                    <p className="text-muted-foreground text-sm">09064648510</p>
                   </div>
                 </div>
 
@@ -82,7 +82,7 @@ export default function Contact() {
                       Prefer chatting? Reach the Plantain Planet team directly on WhatsApp.
                     </p>
                     <a
-                      href="https://wa.me/2348037044942?text=Hello%20Plantain%20Planet%2C%20I%27d%20like%20to%20make%20an%20enquiry."
+                      href="https://wa.me/2349064648510?text=Hello%20Plantain%20Planet%2C%20I%27d%20like%20to%20make%20an%20enquiry."
                       target="_blank"
                       rel="noopener noreferrer"
                     >

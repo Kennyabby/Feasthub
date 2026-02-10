@@ -115,7 +115,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
                   <MapPin className="h-4 w-4 mt-1 shrink-0" />
                   <span>The Plantain Planet by Ozuoba / Rumuosi, Port Harcourt, Rivers State, Nigeria</span>
                 </li>
-                <li>08037044942</li>
+                <li>09064648510</li>
                 <li>theplantainplanet22@gmail.com</li>
               </ul>
             </div>
