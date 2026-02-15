@@ -153,6 +153,7 @@ export async function fetchMenuProducts(
       price: displayPrice,
       salesPrice: salesPriceNum,
       vipPrice: vipPriceNum,
+      type: p.type,
       totalStock: Number(p.totalStock || 0),
       image,
     };

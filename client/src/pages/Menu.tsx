@@ -151,7 +151,7 @@ export default function Menu() {
         <div className="container max-w-screen-xl px-4 text-center">
           <h1 className="text-4xl md:text-5xl font-heading font-bold mb-4">The Plantain Planet Menu</h1>
           <p className="text-muted-foreground max-w-2xl mx-auto">
-            Explore the current The Plantain Planet food and drinks menu across our restaurant, VIP lounge, and open bar.
+            Explore the current accommodation, food and drinks menu across our restaurant, VIP lounge, and open bar.
           </p>
         </div>
       </div>

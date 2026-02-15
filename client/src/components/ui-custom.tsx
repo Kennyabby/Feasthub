@@ -181,7 +181,7 @@ export function FoodCard({
             className="rounded-full bg-muted text-muted-foreground cursor-not-allowed"
             disabled
           >
-            IN-STOCK
+            {product.type === 'goods' ? 'IN-STOCK' : 'SERVICES'}
           </Button>
         </div>
       </div>
