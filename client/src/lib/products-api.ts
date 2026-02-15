@@ -66,6 +66,30 @@ async function getPublicProductsWithStock(company: string): Promise<ProductWithS
   }
 }
 
+// Public products helper using the unauthenticated wageserver route
+async function getPublicServices(company: string): Promise<ProductWithStock[]> {
+  const url = `${WAGESERVER_BASE_URL}/public/services?database=${encodeURIComponent(
+    company
+  )}`;
+
+  try {
+    const resp = await fetch(url, {
+      method: "GET",
+    });
+
+    if (!resp.ok) {
+      console.error("Failed to fetch public services", resp.status, resp.statusText);
+      return [];
+    }
+
+    const data = await resp.json();
+    return (data.record || []) as ProductWithStock[];
+  } catch (err) {
+    console.error("Error fetching public services", err);
+    return [];
+  }
+}
+
 export async function fetchProductCategories(): Promise<ProductCategory[]> {
   const company = PLANTAIN_PLANET_DB;
   const url = `${WAGESERVER_BASE_URL}/public/product-categories?database=${encodeURIComponent(
@@ -83,7 +107,7 @@ export async function fetchProductCategories(): Promise<ProductCategory[]> {
     const rawCategories: any[] = data.categories || [];
 
     return rawCategories.filter((c, index) => {
-      if (c?.code !=='ingredients' && c?.type === 'goods'){
+      if (c?.code !=='ingredients' && ['goods','services'].includes(c?.type)){
           const rawName = typeof c === 'string' ? c : c?.name ?? c?.id ?? `Category ${index + 1}`;
           const name = String(rawName);
           const id = name.toLowerCase().replace(/\s+/g, '-') || `cat-${index}`;
@@ -103,10 +127,11 @@ export async function fetchMenuProducts(
 ): Promise<MenuProduct[]> {
   const company = PLANTAIN_PLANET_DB;
   const productsWithStock = await getPublicProductsWithStock(company);
+  const services = await getPublicServices(company);
 
   const inStock = productsWithStock.filter((p) => (p.totalStock || 0) > 0);
 
-  return inStock.map((p) => {
+  return [...inStock, ...services].map((p) => {
     const salesPriceNum = Number(p.salesPrice || 0) || 0;
     const vipPriceNum = p.vipPrice !== undefined ? Number(p.vipPrice || 0) : undefined;
 

@@ -124,7 +124,7 @@ export default function Menu() {
         All Items
       </Button>
       {categories.filter((ct)=>{
-        return ct.type === "goods"
+        return ['goods', 'services'].includes(ct.type)
       }).map(cat => (
         <Button
           key={cat.id}
