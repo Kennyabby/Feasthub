@@ -15,12 +15,14 @@ import OrderSuccess from "@/pages/OrderSuccess";
 import OrderTracking from "@/pages/OrderTracking";
 import About from "@/pages/About";
 import Contact from "@/pages/Contact";
+import Accommodation from "@/pages/Accommodation";
 
 function Router() {
   return (
     <Switch>
       <Route path="/" component={Home} />
       <Route path="/menu" component={Menu} />
+      <Route path="/accommodation" component={Accommodation} />
       <Route path="/cart" component={Cart} />
       <Route path="/checkout" component={Checkout} />
       <Route path="/order-success" component={OrderSuccess} />

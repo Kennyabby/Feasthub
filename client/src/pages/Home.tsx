@@ -9,11 +9,11 @@ import { Input } from "@/components/ui/input";
 import { useEffect, useState } from "react";
 import { fetchMenuProducts, fetchProductCategories, type MenuProduct, type ProductCategory } from "@/lib/products-api";
 
-// Hero food & drinks images for Plantain Planet home page
-import heroImg1 from "@assets/stock_images/dark_food_website_he_af16fb5c.jpg";
-import heroImg2 from "@assets/stock_images/gourmet_pizza_hero_b_d49ddea6.jpg";
-import heroImg3 from "@assets/stock_images/healthy_salad_bowl_h_d88005d8.jpg";
-import heroImg4 from "@assets/stock_images/chef_presenting_a_go_8f87265b.jpg";
+// Hero environment & food images for Plantain Planet home page
+import heroImg1 from "@assets/stock_images/restaurant_interior__4c194c6a.jpg";
+import heroImg2 from "@assets/stock_images/happy_customers_eati_ce18fe7b.jpg";
+import heroImg3 from "@assets/stock_images/professional_restaur_20b96f94.jpg";
+import heroImg4 from "@assets/stock_images/dark_food_website_he_af16fb5c.jpg";
 
 // Category Component (uses live product categories)
 function CategoryItem({ category, index }: { category: ProductCategory, index: number }) {
@@ -167,15 +167,22 @@ export default function Home() {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-center max-w-3xl mx-auto mb-12"
+            className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12 px-2"
           >
-            <span className="text-primary font-bold uppercase tracking-widest text-sm">Rooms & Accommodation</span>
-            <h2 className="text-3xl md:text-4xl font-heading font-bold mt-2 mb-3">
-              Stay above the bar at The 
-            </h2>
-            <p className="text-muted-foreground text-lg">
-              Our lounge offers comfortable rooms for short stays and full nights, perfect for guests who want to enjoy Port Harcourt without rushing home.
-            </p>
+            <div className="max-w-2xl">
+              <span className="text-primary font-bold uppercase tracking-widest text-sm">Rooms & Accommodation</span>
+              <h2 className="text-3xl md:text-5xl font-heading font-bold mt-2">
+                Stay Above The Bar
+              </h2>
+              <p className="text-muted-foreground text-lg mt-4">
+                Our lounge offers comfortable, private rooms for short rests and overnight stays, perfect for guests who want to enjoy Port Harcourt without rushing home.
+              </p>
+            </div>
+            <Button size="lg" className="rounded-full font-bold group" asChild>
+              <Link href="/accommodation">
+                View All Rooms <ChevronRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+              </Link>
+            </Button>
           </motion.div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -183,19 +190,21 @@ export default function Home() {
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="bg-background border border-border rounded-2xl p-6 shadow-sm flex flex-col justify-between"
+              className="bg-background border border-border rounded-2xl overflow-hidden shadow-sm flex flex-col group"
             >
-              <div className="space-y-3">
-                <h3 className="font-heading text-xl font-bold">Regular Rooms</h3>
-                <p className="text-muted-foreground text-sm">
-                  Five cozy standard rooms with comfortable beds, AC, and private bathrooms.
-                </p>
-                <p className="text-sm font-semibold">
-                  From <span className="text-primary">NGN15,000</span> to <span className="text-primary">NGN25,000</span> per night.
-                </p>
+              <div className="h-48 overflow-hidden">
+                <img src="https://images.unsplash.com/photo-1631049307264-da0ec9d70304?auto=format&fit=crop&q=80&w=600" alt="Regular Rooms" className="w-full h-full object-cover transition-transform group-hover:scale-105" />
               </div>
-              <div className="mt-4 text-xs text-muted-foreground">
-                Perfect for overnight stays after enjoying our food, drinks, and music.
+              <div className="p-6 flex-1 flex flex-col justify-between space-y-4">
+                <div className="space-y-3">
+                  <h3 className="font-heading text-xl font-bold">Regular Rooms</h3>
+                  <p className="text-muted-foreground text-sm">
+                    Cozy standard rooms with comfortable beds, AC, and private bathrooms for a full night's rest.
+                  </p>
+                  <p className="text-sm font-semibold text-primary">
+                    Starting from ₦15,000 / night
+                  </p>
+                </div>
               </div>
             </motion.div>
 
@@ -204,19 +213,21 @@ export default function Home() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.1 }}
-              className="bg-background border border-border rounded-2xl p-6 shadow-sm flex flex-col justify-between"
+              className="bg-background border border-border rounded-2xl overflow-hidden shadow-sm flex flex-col group"
             >
-              <div className="space-y-3">
-                <h3 className="font-heading text-xl font-bold">Short-Rest Room</h3>
-                <p className="text-muted-foreground text-sm">
-                  A dedicated short-rest room for guests who need a private space to relax for a few hours.
-                </p>
-                <p className="text-sm font-semibold">
-                  Priced for flexible, short stays. Ask our team for current rates.
-                </p>
+              <div className="h-48 overflow-hidden">
+                <img src="https://images.unsplash.com/photo-1590490360182-c33d57733427?auto=format&fit=crop&q=80&w=600" alt="Short-Rest Room" className="w-full h-full object-cover transition-transform group-hover:scale-105" />
               </div>
-              <div className="mt-4 text-xs text-muted-foreground">
-                Ideal for freshening up between meetings, events, or travel.
+              <div className="p-6 flex-1 flex flex-col justify-between space-y-4">
+                <div className="space-y-3">
+                  <h3 className="font-heading text-xl font-bold">Short-Rest Room</h3>
+                  <p className="text-muted-foreground text-sm">
+                    Dedicated short-rest rooms for guests who need a private space to relax for a few hours.
+                  </p>
+                  <p className="text-sm font-semibold text-primary">
+                    Flexible Hourly Pricing
+                  </p>
+                </div>
               </div>
             </motion.div>
 
@@ -225,19 +236,21 @@ export default function Home() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.2 }}
-              className="bg-background border border-border rounded-2xl p-6 shadow-sm flex flex-col justify-between"
+              className="bg-background border border-border rounded-2xl overflow-hidden shadow-sm flex flex-col group"
             >
-              <div className="space-y-3">
-                <h3 className="font-heading text-xl font-bold">Room Service</h3>
-                <p className="text-muted-foreground text-sm">
-                  Order from the same food and drinks menu directly to your room, with dedicated service for in-house guests.
-                </p>
-                <p className="text-sm font-semibold">
-                  Food, drinks, and late-night bites served from the lounge to your door.
-                </p>
+              <div className="h-48 overflow-hidden">
+                <img src="https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&q=80&w=600" alt="Room Service" className="w-full h-full object-cover transition-transform group-hover:scale-105" />
               </div>
-              <div className="mt-4 text-xs text-muted-foreground">
-                For reservations or room enquiries, please contact us via the contact page or email.
+              <div className="p-6 flex-1 flex flex-col justify-between space-y-4">
+                <div className="space-y-3">
+                  <h3 className="font-heading text-xl font-bold">Room Service</h3>
+                  <p className="text-muted-foreground text-sm">
+                    Order from our full food and drinks menu directly to your door, served fresh from the kitchen.
+                  </p>
+                  <p className="text-sm font-semibold text-primary">
+                    24/7 Guest Service
+                  </p>
+                </div>
               </div>
             </motion.div>
           </div>

@@ -2,14 +2,28 @@ import { Layout } from "@/components/layout";
 import { FeatureCard } from "@/components/ui-custom";
 import { Users, Award, Leaf, MapPin, ChefHat, UtensilsCrossed, History } from "lucide-react";
 import { motion } from "framer-motion";
+import { Link } from "wouter";
+
+// Images
+import heroBg from "@assets/stock_images/restaurant_interior__4c194c6a.jpg";
+import servingImg1 from "@assets/stock_images/jollof_rice_with_gri_6e3baba3.jpg";
+import servingImg2 from "@assets/stock_images/cocktail_drink_glass_696ec9f0.jpg";
+import gallery1 from "@assets/stock_images/happy_customers_eati_ce18fe7b.jpg";
+import gallery2 from "@assets/stock_images/professional_restaur_20b96f94.jpg";
+import gallery3 from "@assets/stock_images/chef_presenting_a_go_8f87265b.jpg";
 
 
 export default function About() {
   return (
     <Layout>
       {/* Hero Section */}
-      <section className="relative h-[50vh] min-h-[400px] w-full overflow-hidden flex items-center justify-center bg-gradient-to-br from-primary/40 via-black to-secondary/40">
-        <div className="absolute inset-0 z-0 opacity-40 bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.12),transparent_60%),radial-gradient(circle_at_bottom,rgba(255,255,255,0.08),transparent_55%)]" />
+      <section className="relative h-[50vh] min-h-[400px] w-full overflow-hidden flex items-center justify-center">
+        <div 
+          className="absolute inset-0 z-0 bg-center bg-cover scale-105"
+          style={{ backgroundImage: `url(${heroBg})` }}
+        >
+          <div className="absolute inset-0 bg-black/60 backdrop-blur-[2px]" />
+        </div>
         <div className="relative z-10 container text-center px-4">
           <motion.h1 
             initial={{ opacity: 0, y: 30 }}
@@ -31,7 +45,7 @@ export default function About() {
       </section>
 
       {/* Our Mission */}
-      <section className="py-20 bg-background">
+      <section className="py-24 bg-background">
         <div className="container max-w-screen-xl px-4">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             <motion.div 
@@ -39,17 +53,26 @@ export default function About() {
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6 }}
+              className="relative"
             >
-              <div className="relative bg-card border border-border rounded-2xl p-8 shadow-2xl space-y-4">
-                <div className="inline-flex items-center gap-2 text-primary text-sm font-semibold uppercase tracking-widest">
+              <div className="relative bg-card border border-border rounded-2xl p-8 shadow-2xl space-y-6 overflow-hidden">
+                <div className="absolute top-0 right-0 w-32 h-32 opacity-10">
+                   <ChefHat className="w-full h-full -rotate-12 translate-x-1/4 -translate-y-1/4" />
+                </div>
+                <div className="inline-flex items-center gap-2 text-primary text-sm font-semibold uppercase tracking-widest relative z-10">
                   <ChefHat className="h-5 w-5" /> The Plantain Planet Kitchen
                 </div>
-                <p className="text-muted-foreground text-base leading-relaxed">
-                  From weekday lunches to late-night lounge service, our kitchen focuses on the kind of food Port Harcourt people actually crave: assorted, chicken, pepper soup, swallows, rich soups, nutritious proteins, and chilled bar drinks.
-                </p>
-                <p className="text-muted-foreground text-base leading-relaxed">
-                  Every plate is designed to pair perfectly with cold beers, spirits, malt, Hollandia, Chi Exotic, and other refreshments from our bar and VIP sections.
-                </p>
+                <div className="space-y-4 relative z-10">
+                  <p className="text-muted-foreground text-lg leading-relaxed">
+                    From weekday lunches to late-night lounge service, our kitchen focuses on the kind of food Port Harcourt people actually crave: assorted, chicken, pepper soup, swallows, rich soups, nutritious proteins, and chilled bar drinks.
+                  </p>
+                  <p className="text-muted-foreground text-lg leading-relaxed">
+                    Every plate is designed to pair perfectly with cold beers, spirits, malt, Hollandia, Chi Exotic, and other refreshments from our bar and VIP sections.
+                  </p>
+                </div>
+                <div className="pt-4 border-t border-border relative z-10">
+                   <img src={gallery3} alt="Chef" className="rounded-xl w-full h-48 object-cover shadow-inner" />
+                </div>
               </div>
             </motion.div>
             
@@ -168,15 +191,21 @@ export default function About() {
               className="order-1 lg:order-2 relative"
             >
               <div className="grid grid-cols-2 gap-4">
-                <div className="rounded-2xl shadow-lg w-full h-64 bg-gradient-to-br from-primary/40 via-background to-secondary/30 flex items-center justify-center text-center px-4">
-                  <p className="text-sm md:text-base text-white/90 font-medium">
-                    Signature Port Harcourt pots simmering with native soups, seafood, and assorted meats.
-                  </p>
+                <div className="relative rounded-2xl shadow-lg w-full h-64 overflow-hidden group">
+                  <img src={servingImg1} alt="Port Harcourt Soups" className="absolute inset-0 w-full h-full object-cover transition-transform group-hover:scale-110" />
+                  <div className="absolute inset-0 bg-black/40 flex items-center justify-center text-center px-4">
+                    <p className="text-sm md:text-base text-white font-bold drop-shadow-lg">
+                      Signature Nigerian Soups & Seafood
+                    </p>
+                  </div>
                 </div>
-                <div className="rounded-2xl shadow-lg w-full h-64 bg-gradient-to-br from-secondary/40 via-background to-primary/30 flex items-center justify-center text-center px-4">
-                  <p className="text-sm md:text-base text-white/90 font-medium">
-                    Chilled drinks on ice: beers, spirits, cocktails, malt, Hollandia, Chi Exotic, and more.
-                  </p>
+                <div className="relative rounded-2xl shadow-lg w-full h-64 overflow-hidden group">
+                  <img src={servingImg2} alt="Chilled Drinks" className="absolute inset-0 w-full h-full object-cover transition-transform group-hover:scale-110" />
+                  <div className="absolute inset-0 bg-black/40 flex items-center justify-center text-center px-4">
+                    <p className="text-sm md:text-base text-white font-bold drop-shadow-lg">
+                      Chilled Drinks & Signature Cocktails
+                    </p>
+                  </div>
                 </div>
               </div>
             </motion.div>
@@ -193,20 +222,30 @@ export default function About() {
         
         {/* Simple masonry-style gallery using flex/grid */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 px-4 max-w-screen-2xl mx-auto">
-          <div className="h-64 md:h-80 rounded-xl overflow-hidden bg-gradient-to-br from-primary/40 via-background to-secondary/40 flex items-center justify-center px-4 text-center">
-            <p className="text-white/90 text-sm md:text-base font-medium">
-              After-work chill spots with music, football on screen, and easy access to food and drinks.
-            </p>
+          <div className="relative h-64 md:h-80 rounded-xl overflow-hidden group">
+            <img src={servingImg1} alt="Food Gallery" className="absolute inset-0 w-full h-full object-cover transition-transform group-hover:scale-110" />
+            <div className="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition-colors" />
+            <div className="absolute inset-0 flex items-center justify-center px-4 text-center opacity-0 group-hover:opacity-100 transition-opacity">
+              <p className="text-white text-sm font-bold">Authentic Port Harcourt Flavors</p>
+            </div>
           </div>
-          <div className="h-64 md:h-80 rounded-xl overflow-hidden md:col-span-2 bg-gradient-to-br from-secondary/40 via-background to-primary/40 flex items-center justify-center px-4 text-center">
-            <p className="text-white/90 text-sm md:text-base font-medium">
-              Friends and colleagues gathering for birthdays, link-ups, and game nights in Port Harcourt.
-            </p>
+          <div className="relative h-64 md:h-80 rounded-xl overflow-hidden md:col-span-2 group">
+            <img src={gallery1} alt="Vibe" className="absolute inset-0 w-full h-full object-cover transition-transform group-hover:scale-110" />
+            <div className="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition-colors" />
+            <div className="absolute inset-0 flex items-center justify-center px-4 text-center">
+              <p className="text-white text-base md:text-xl font-heading font-bold drop-shadow-md">
+                Great Food, Great Music, Best Vibes.
+              </p>
+            </div>
           </div>
-          <div className="h-64 md:h-80 rounded-xl overflow-hidden bg-gradient-to-br from-primary/30 via-background to-secondary/30 flex items-center justify-center px-4 text-center">
-            <p className="text-white/90 text-sm md:text-base font-medium">
-              VIP lounge and room service for guests who want a more private "The Plantain Planet" experience.
-            </p>
+          <div className="relative h-64 md:h-80 rounded-xl overflow-hidden group cursor-pointer">
+            <img src={gallery2} alt="Lounge" className="absolute inset-0 w-full h-full object-cover transition-transform group-hover:scale-110" />
+            <Link href="/accommodation" className="absolute inset-0 z-10 flex flex-col items-center justify-center bg-black/40 group-hover:bg-black/60 transition-colors px-4 text-center">
+              <p className="text-white text-sm md:text-base font-bold transition-transform group-hover:scale-105">
+                VIP Lounge & Rooms
+              </p>
+              <span className="text-primary text-xs font-bold mt-2 uppercase tracking-widest border-b border-primary">Explore Service</span>
+            </Link>
           </div>
         </div>
       </section>
