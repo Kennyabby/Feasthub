@@ -4,7 +4,6 @@ import { Camera, MapPin, Video, Star, Bed, Bath, Wifi, Tv, Wind, Coffee } from "
 import { Button } from "@/components/ui/button";
 import { Link } from "wouter";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
-import { getRoomMediaByProduct } from "@/lib/room-media";
 import { useEffect, useMemo, useState } from "react";
 import { fetchMenuProducts, type MenuProduct } from "@/lib/products-api";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
@@ -57,6 +56,9 @@ export default function Accommodation() {
   const [roomImages, setRoomImages] = useState<Record<string, string>>({});
   const [roomVideos, setRoomVideos] = useState<Record<string, string>>({});
   const [roomProducts, setRoomProducts] = useState<MenuProduct[]>([]);
+  const [isLoadingMedia, setIsLoadingMedia] = useState(true);
+  const [isLoadingPrices, setIsLoadingPrices] = useState(true);
+  const [roomImageOk, setRoomImageOk] = useState<Record<string, boolean>>({});
   const [mediaViewerOpen, setMediaViewerOpen] = useState(false);
   const [mediaViewerItem, setMediaViewerItem] = useState<
     | { type: "image"; src: string; label?: string }
@@ -68,9 +70,14 @@ export default function Accommodation() {
 
   useEffect(() => {
     (async () => {
-      const products = await fetchMenuProducts("normal");
-      const roomsOnly = products.filter((p) => String(p.category || "").toLowerCase() === "room");
-      setRoomProducts(roomsOnly);
+      try {
+        setIsLoadingPrices(true);
+        const products = await fetchMenuProducts("normal");
+        const roomsOnly = products.filter((p) => String(p.category || "").toLowerCase() === "room");
+        setRoomProducts(roomsOnly);
+      } finally {
+        setIsLoadingPrices(false);
+      }
 
       // Premises assets are known and local (client/public/premises).
       // Avoid fetch-based existence checks (can be unreliable depending on host/config).
@@ -82,30 +89,24 @@ export default function Accommodation() {
       });
       const premisesVideos = ["/premises/media/media1.mp4"];
 
-      const roomDescriptors = [
-        { id: "room-1", name: "Room 1", category: "room" },
-        { id: "room-2", name: "Room 2", category: "room" },
-        { id: "room-3", name: "Room 3", category: "room" },
-        { id: "room-4", name: "Room 4", category: "room" },
-        { id: "room-5", name: "Room 5", category: "room" },
-      ];
+      try {
+        setIsLoadingMedia(true);
 
-      const roomBundles = await Promise.all(roomDescriptors.map((r) => getRoomMediaByProduct(r)));
+        // Option 1: deterministic room media paths (no probing). Only photo1 + media1 per room.
+        const roomNames = ["Room 1", "Room 2", "Room 3", "Room 4", "Room 5"];
+        const roomImageMap: Record<string, string> = {};
+        const roomVideoMap: Record<string, string> = {};
+        const roomGalleryItems: GalleryItem[] = [];
 
-      const roomGalleryItems: GalleryItem[] = [];
-      const roomImageMap: Record<string, string> = {};
-      const roomVideoMap: Record<string, string> = {};
-
-      roomDescriptors.forEach((r, idx) => {
-        const b = roomBundles[idx];
-        const firstImg = b.images[0]?.src;
-        if (firstImg) roomImageMap[r.name] = firstImg;
-        const firstVid = b.videos[0]?.src;
-        if (firstVid) roomVideoMap[r.name] = firstVid;
-
-        b.images.forEach((img) => roomGalleryItems.push({ type: "image", src: img.src, alt: img.alt || r.name }));
-        b.videos.forEach((v) => roomGalleryItems.push({ type: "video", src: v.src, alt: v.title || r.name }));
-      });
+        roomNames.forEach((name) => {
+          const folder = name.toLowerCase(); // "room 1"
+          const img = `/rooms/${folder}/images/photo1.jpeg`;
+          const vid = `/rooms/${folder}/media/media1.mp4`;
+          roomImageMap[name] = img;
+          roomVideoMap[name] = vid;
+          roomGalleryItems.push({ type: "video", src: vid, alt: `${name} video` });
+          roomGalleryItems.push({ type: "image", src: img, alt: `${name} photo` });
+        });
 
       const premisesGalleryItems: GalleryItem[] = [
         ...premisesVideos.map((src, idx) => ({ type: "video" as const, src, alt: `Premises video ${idx + 1}` })),
@@ -114,18 +115,20 @@ export default function Accommodation() {
 
       setRoomImages(roomImageMap);
       setRoomVideos(roomVideoMap);
-      const roomVideosFirst: GalleryItem[] = [];
-      const roomImagesAfter: GalleryItem[] = [];
-      roomGalleryItems.forEach((it) => {
-        if (it.type === "video") roomVideosFirst.push(it);
-        else roomImagesAfter.push(it);
+      setRoomImageOk((prev) => {
+        const next: Record<string, boolean> = { ...prev };
+        Object.keys(roomImageMap).forEach((k) => {
+          if (next[k] === undefined) next[k] = true;
+        });
+        return next;
       });
-
       setGalleryItems([
         ...premisesGalleryItems,
-        ...roomVideosFirst,
-        ...roomImagesAfter,
+        ...roomGalleryItems,
       ]);
+      } finally {
+        setIsLoadingMedia(false);
+      }
     })();
   }, [premisesFallback]);
 
@@ -266,44 +269,50 @@ export default function Accommodation() {
 
           <Carousel className="w-full max-w-5xl mx-auto">
             <CarouselContent>
-              {galleryItems.map((item: GalleryItem, index: number) => (
-                <CarouselItem key={index} className="md:basis-1/2 lg:basis-1/3 p-2">
-                  <div className="relative aspect-video rounded-2xl overflow-hidden group border border-border">
-                    {item.type === 'video' ? (
-                      <div className="relative w-full h-full">
-                        <video
-                          src={item.src}
-                          controls
-                          playsInline
-                          preload="metadata"
-                          className="w-full h-full object-cover"
-                        />
-                        <div className="absolute right-3 top-3 z-10">
-                          <Button
+              {isLoadingMedia && galleryItems.length === 0
+                ? Array.from({ length: 6 }).map((_, index) => (
+                    <CarouselItem key={index} className="md:basis-1/2 lg:basis-1/3 p-2">
+                      <div className="relative aspect-video rounded-2xl overflow-hidden border border-border bg-muted animate-pulse" />
+                    </CarouselItem>
+                  ))
+                : galleryItems.map((item: GalleryItem, index: number) => (
+                    <CarouselItem key={index} className="md:basis-1/2 lg:basis-1/3 p-2">
+                      <div className="relative aspect-video rounded-2xl overflow-hidden group border border-border">
+                        {item.type === 'video' ? (
+                          <div className="relative w-full h-full">
+                            <video
+                              src={item.src}
+                              controls
+                              playsInline
+                              preload="metadata"
+                              className="w-full h-full object-cover"
+                            />
+                            <div className="absolute right-3 top-3 z-10">
+                              <Button
+                                type="button"
+                                size="sm"
+                                variant="secondary"
+                                onClick={() => openMediaViewer({ type: "video", src: item.src, label: item.alt })}
+                              >
+                                View larger
+                              </Button>
+                            </div>
+                          </div>
+                        ) : (
+                          <button
                             type="button"
-                            size="sm"
-                            variant="secondary"
-                            onClick={() => openMediaViewer({ type: "video", src: item.src, label: item.alt })}
+                            className="w-full h-full"
+                            onClick={() => openMediaViewer({ type: "image", src: item.src as string, label: item.alt })}
                           >
-                            View larger
-                          </Button>
+                            <img src={item.src as string} alt={item.alt} className="w-full h-full object-cover transition-transform group-hover:scale-110" />
+                          </button>
+                        )}
+                        <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-6">
+                          <span className="text-white font-bold">{item.alt}</span>
                         </div>
                       </div>
-                    ) : (
-                      <button
-                        type="button"
-                        className="w-full h-full"
-                        onClick={() => openMediaViewer({ type: "image", src: item.src as string, label: item.alt })}
-                      >
-                        <img src={item.src as string} alt={item.alt} className="w-full h-full object-cover transition-transform group-hover:scale-110" />
-                      </button>
-                    )}
-                    <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-6">
-                      <span className="text-white font-bold">{item.alt}</span>
-                    </div>
-                  </div>
-                </CarouselItem>
-              ))}
+                    </CarouselItem>
+                  ))}
             </CarouselContent>
             <div className="hidden md:block">
               <CarouselPrevious className="-left-12" />
@@ -326,13 +335,22 @@ export default function Accommodation() {
                   className={index % 2 !== 0 ? 'lg:order-2' : ''}
                 >
                   <div className="relative">
-                    {room.imageSrc ? (
+                    {isLoadingMedia ? (
+                      <div className="rounded-3xl shadow-2xl w-full aspect-[4/3] bg-muted animate-pulse" />
+                    ) : (room.imageSrc && roomImageOk[room.name] !== false) ? (
                       <button
                         type="button"
                         className="block w-full"
                         onClick={() => openMediaViewer({ type: "image", src: room.imageSrc as string, label: room.title })}
                       >
-                        <img src={room.imageSrc} alt={room.title} className="rounded-3xl shadow-2xl w-full aspect-[4/3] object-cover" />
+                        <img
+                          src={room.imageSrc}
+                          alt={room.title}
+                          className="rounded-3xl shadow-2xl w-full aspect-[4/3] object-cover"
+                          onError={() => {
+                            setRoomImageOk((prev) => ({ ...prev, [room.name]: false }));
+                          }}
+                        />
                       </button>
                     ) : room.videoSrc ? (
                       <div className="relative rounded-3xl shadow-2xl overflow-hidden border border-border">
@@ -354,11 +372,15 @@ export default function Accommodation() {
                     <div className="absolute -bottom-6 -right-6 bg-primary text-white p-6 rounded-2xl shadow-xl hidden md:block">
                       <div className="text-xs font-bold uppercase tracking-wider opacity-80">Starting from</div>
                       <div className="text-2xl font-bold">
-                        {room.vipPrice !== undefined
-                          ? `₦${room.vipPrice.toLocaleString()}`
-                          : room.normalPrice !== undefined
-                            ? `₦${room.normalPrice.toLocaleString()}`
-                            : ""}
+                        {isLoadingPrices ? (
+                          <div className="h-7 w-28 bg-white/20 rounded animate-pulse" />
+                        ) : room.vipPrice !== undefined ? (
+                          `₦${room.vipPrice.toLocaleString()}`
+                        ) : room.normalPrice !== undefined ? (
+                          `₦${room.normalPrice.toLocaleString()}`
+                        ) : (
+                          ""
+                        )}
                       </div>
                       <div className="text-xs font-semibold opacity-90">VIP</div>
                       {room.normalPrice !== undefined && (
