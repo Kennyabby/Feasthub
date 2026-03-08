@@ -106,10 +106,12 @@ export function FoodCard({
   product,
   showBothPrices = false,
   priceType,
+  onRoomDetails,
 }: {
   product: any;
   showBothPrices?: boolean;
   priceType?: "normal" | "vip";
+  onRoomDetails?: (product: any) => void;
 }) {
   const { addToCart } = useCart();
 
@@ -184,6 +186,19 @@ export function FoodCard({
             {product.type === 'goods' ? 'IN-STOCK' : 'SERVICES'}
           </Button>
         </div>
+
+        {String(product?.category || "").toLowerCase() === "room" && onRoomDetails && (
+          <div className="pt-2">
+            <Button
+              type="button"
+              variant="outline"
+              className="w-full"
+              onClick={() => onRoomDetails(product)}
+            >
+              Room Services
+            </Button>
+          </div>
+        )}
       </div>
     </motion.div>
   );

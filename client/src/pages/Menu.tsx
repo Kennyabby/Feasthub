@@ -5,9 +5,12 @@ import { Search, Filter, X } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger, SheetHeader, SheetTitle } from "@/components/ui/sheet";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 import { cn } from "@/lib/utils";
 import { useLocation } from "wouter";
 import { fetchMenuProducts, fetchProductCategories, type MenuProduct, type PriceType, type ProductCategory } from "@/lib/products-api";
+import { getRoomMediaByProduct } from "@/lib/room-media";
 
 export default function Menu() {
   const [location] = useLocation();
@@ -25,12 +28,25 @@ export default function Menu() {
   const [minPrice, setMinPrice] = useState<number | null>(null);
   const [maxPrice, setMaxPrice] = useState<number | null>(null);
   const menuTopRef = useRef<HTMLDivElement | null>(null);
+  const [highlightedProductId, setHighlightedProductId] = useState<string | null>(null);
+  const [targetProductId, setTargetProductId] = useState<string | null>(null);
+  const [roomDetailsOpen, setRoomDetailsOpen] = useState(false);
+  const [roomDetailsProduct, setRoomDetailsProduct] = useState<MenuProduct | null>(null);
+  const [roomMediaLoading, setRoomMediaLoading] = useState(false);
+  const [roomMedia, setRoomMedia] = useState<{ images: { src: string; alt?: string }[]; videos: { src: string; title?: string }[] }>({ images: [], videos: [] });
+  const [mediaViewerOpen, setMediaViewerOpen] = useState(false);
+  const [mediaViewerItem, setMediaViewerItem] = useState<
+    | { type: "image"; src: string; label?: string }
+    | { type: "video"; src: string; label?: string }
+    | null
+  >(null);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
     const searchParams = new URLSearchParams(window.location.search);
     const initialCategoryCode = searchParams.get("category");
     const initialCategory = initialCategoryCode || "all";
+    const productId = searchParams.get("productId");
     const rawPriceType = searchParams.get("priceType");
     const urlPriceType: PriceType = rawPriceType === "vip" ? "vip" : rawPriceType === "normal" ? "normal" : "normal";
 
@@ -38,6 +54,7 @@ export default function Menu() {
     setActiveCategory(initialCategory);
     setPriceType(urlPriceType);
     setHasExplicitPriceType(hasPriceTypeParam);
+    setTargetProductId(productId);
 
     (async () => {
       const [menuProducts, fetchedCategories] = await Promise.all([
@@ -76,6 +93,38 @@ export default function Menu() {
       }
     })();
   }, []);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    if (!targetProductId) return;
+    if (isLoadingProducts) return;
+    const el = document.getElementById(`menu-product-${targetProductId}`);
+    if (!el) return;
+
+    el.scrollIntoView({ behavior: "smooth", block: "center" });
+    setHighlightedProductId(targetProductId);
+    const t = window.setTimeout(() => setHighlightedProductId(null), 6000);
+    return () => window.clearTimeout(t);
+  }, [targetProductId, isLoadingProducts, products.length, location]);
+
+  const openRoomDetails = async (product: MenuProduct) => {
+    setRoomDetailsProduct(product);
+    setRoomDetailsOpen(true);
+    setRoomMedia({ images: [], videos: [] });
+
+    try {
+      setRoomMediaLoading(true);
+      const media = await getRoomMediaByProduct({ id: product.id, name: product.name, category: product.category });
+      setRoomMedia(media);
+    } finally {
+      setRoomMediaLoading(false);
+    }
+  };
+
+  const openMediaViewer = (item: { type: "image" | "video"; src: string; label?: string }) => {
+    setMediaViewerItem(item as any);
+    setMediaViewerOpen(true);
+  };
 
   const filteredProducts = products
     .filter(product => {
@@ -147,6 +196,124 @@ export default function Menu() {
 
   return (
     <Layout>
+      <Dialog
+        open={mediaViewerOpen}
+        onOpenChange={(open) => {
+          setMediaViewerOpen(open);
+          if (!open) setMediaViewerItem(null);
+        }}
+      >
+        <DialogContent className="w-[calc(100vw-1rem)] max-w-6xl max-h-[92vh] overflow-hidden p-3 sm:p-4">
+          <DialogHeader className="pr-8">
+            <DialogTitle>{mediaViewerItem?.label || "Media"}</DialogTitle>
+          </DialogHeader>
+
+          <div className="w-full max-h-[calc(92vh-5rem)] overflow-auto">
+            {mediaViewerItem?.type === "image" ? (
+              <img
+                src={mediaViewerItem.src}
+                alt={mediaViewerItem.label || "Room image"}
+                className="w-full h-auto rounded-lg"
+              />
+            ) : mediaViewerItem?.type === "video" ? (
+              <video
+                src={mediaViewerItem.src}
+                controls
+                autoPlay
+                className="w-full rounded-lg"
+              />
+            ) : null}
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog
+        open={roomDetailsOpen}
+        onOpenChange={(open) => {
+          setRoomDetailsOpen(open);
+          if (!open) {
+            setRoomDetailsProduct(null);
+            setRoomMedia({ images: [], videos: [] });
+          }
+        }}
+      >
+        <DialogContent className="w-[calc(100vw-1.5rem)] max-w-5xl max-h-[92vh] overflow-hidden">
+          <DialogHeader>
+            <DialogTitle>{roomDetailsProduct?.name || "Room details"}</DialogTitle>
+          </DialogHeader>
+
+          {roomMediaLoading ? (
+            <div className="text-sm text-muted-foreground">Loading room media...</div>
+          ) : (
+            <div className="space-y-6 overflow-y-auto pr-1 max-h-[calc(92vh-7rem)]">
+              {roomMedia.images.length > 0 && (
+                <Carousel className="w-full">
+                  <CarouselContent>
+                    {roomMedia.images.map((img, idx) => (
+                      <CarouselItem key={idx} className="p-1 basis-full md:basis-1/2">
+                        <div className="relative aspect-video rounded-xl overflow-hidden border border-border">
+                          <img src={img.src} alt={img.alt || "Room image"} className="w-full h-full object-cover" />
+                          <div className="absolute right-2 top-2">
+                            <Button
+                              type="button"
+                              size="sm"
+                              variant="secondary"
+                              onClick={() => openMediaViewer({ type: "image", src: img.src, label: img.alt || "Room image" })}
+                            >
+                              View larger
+                            </Button>
+                          </div>
+                        </div>
+                      </CarouselItem>
+                    ))}
+                  </CarouselContent>
+                  <CarouselPrevious />
+                  <CarouselNext />
+                </Carousel>
+              )}
+
+              {roomMedia.videos.length > 0 && (
+                <Carousel className="w-full">
+                  <CarouselContent>
+                    {roomMedia.videos.map((v, idx) => (
+                      <CarouselItem key={idx} className="p-1 basis-full">
+                        <div className="space-y-2">
+                          <div className="flex items-center gap-2">
+                            {v.title && <div className="text-sm font-medium">{v.title}</div>}
+                            <Button
+                              type="button"
+                              size="sm"
+                              variant="secondary"
+                              className="ml-auto"
+                              onClick={() => openMediaViewer({ type: "video", src: v.src, label: v.title || "Room video" })}
+                            >
+                              View larger
+                            </Button>
+                          </div>
+                          <video src={v.src} controls className="w-full rounded-xl border border-border max-h-[55vh]" />
+                        </div>
+                      </CarouselItem>
+                    ))}
+                  </CarouselContent>
+                  <CarouselPrevious />
+                  <CarouselNext />
+                </Carousel>
+              )}
+
+              {roomMedia.images.length === 0 && roomMedia.videos.length === 0 && (
+                <div className="text-sm text-muted-foreground">
+                  No media found. Add files under
+                  <span className="font-mono"> client/public/rooms/&lt;room name&gt;/images/photo1.jpg</span>
+                  and
+                  <span className="font-mono"> client/public/rooms/&lt;room name&gt;/media/media1.mp4</span>
+                  .
+                </div>
+              )}
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
+
       <div ref={menuTopRef} className="bg-muted/30 py-12 border-b border-border">
         <div className="container max-w-screen-xl px-4 text-center">
           <h1 className="text-4xl md:text-5xl font-heading font-bold mb-4">The Plantain Planet Menu</h1>
@@ -267,12 +434,21 @@ export default function Menu() {
             ) : filteredProducts.length > 0 ? (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 {filteredProducts.map(product => (
-                  <FoodCard
+                  <div
                     key={product.id}
-                    product={product}
-                    showBothPrices={!hasExplicitPriceType}
-                    priceType={priceType}
-                  />
+                    id={`menu-product-${product.id}`}
+                    className={cn(
+                      "rounded-xl transition-all",
+                      highlightedProductId === product.id && "ring-2 ring-primary ring-offset-2 ring-offset-background"
+                    )}
+                  >
+                    <FoodCard
+                      product={product}
+                      showBothPrices={!hasExplicitPriceType}
+                      priceType={priceType}
+                      onRoomDetails={(p) => openRoomDetails(p as any)}
+                    />
+                  </div>
                 ))}
               </div>
             ) : (

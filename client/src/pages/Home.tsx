@@ -193,7 +193,7 @@ export default function Home() {
               className="bg-background border border-border rounded-2xl overflow-hidden shadow-sm flex flex-col group"
             >
               <div className="h-48 overflow-hidden">
-                <img src="https://images.unsplash.com/photo-1631049307264-da0ec9d70304?auto=format&fit=crop&q=80&w=600" alt="Regular Rooms" className="w-full h-full object-cover transition-transform group-hover:scale-105" />
+                <img src="/premises/images/photo1.jpeg" alt="Regular Rooms" className="w-full h-full object-cover transition-transform group-hover:scale-105" />
               </div>
               <div className="p-6 flex-1 flex flex-col justify-between space-y-4">
                 <div className="space-y-3">
@@ -216,7 +216,7 @@ export default function Home() {
               className="bg-background border border-border rounded-2xl overflow-hidden shadow-sm flex flex-col group"
             >
               <div className="h-48 overflow-hidden">
-                <img src="https://images.unsplash.com/photo-1590490360182-c33d57733427?auto=format&fit=crop&q=80&w=600" alt="Short-Rest Room" className="w-full h-full object-cover transition-transform group-hover:scale-105" />
+                <img src="/premises/images/photo2.jpeg" alt="Short-Rest Room" className="w-full h-full object-cover transition-transform group-hover:scale-105" />
               </div>
               <div className="p-6 flex-1 flex flex-col justify-between space-y-4">
                 <div className="space-y-3">
@@ -239,7 +239,7 @@ export default function Home() {
               className="bg-background border border-border rounded-2xl overflow-hidden shadow-sm flex flex-col group"
             >
               <div className="h-48 overflow-hidden">
-                <img src="https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&q=80&w=600" alt="Room Service" className="w-full h-full object-cover transition-transform group-hover:scale-105" />
+                <img src="/premises/images/photo3.jpeg" alt="Room Service" className="w-full h-full object-cover transition-transform group-hover:scale-105" />
               </div>
               <div className="p-6 flex-1 flex flex-col justify-between space-y-4">
                 <div className="space-y-3">

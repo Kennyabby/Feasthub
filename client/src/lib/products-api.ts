@@ -33,6 +33,7 @@ export interface MenuProduct {
   vipPrice?: number;
   totalStock: number;
   image?: string;
+  type?: string;
 }
 
 export interface ProductCategory {
