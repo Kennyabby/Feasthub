@@ -444,7 +444,10 @@ export default function Menu() {
                   >
                     <FoodCard
                       product={product}
-                      showBothPrices={!hasExplicitPriceType}
+                      showBothPrices={
+                        (!hasExplicitPriceType && Boolean(targetProductId) && targetProductId === product.id) ||
+                        (!hasExplicitPriceType && !targetProductId)
+                      }
                       priceType={priceType}
                       onRoomDetails={(p) => openRoomDetails(p as any)}
                     />
