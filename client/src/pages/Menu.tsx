@@ -37,9 +37,10 @@ export default function Menu() {
   const [mediaViewerOpen, setMediaViewerOpen] = useState(false);
   const [mediaViewerItem, setMediaViewerItem] = useState<
     | { type: "image"; src: string; label?: string }
-    | { type: "video"; src: string; label?: string }
+    | { type: "video"; src: string; label?: string; startTime?: number }
     | null
   >(null);
+  const roomInlineVideoRefs = useRef<Record<string, HTMLVideoElement | null>>({});
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -121,7 +122,7 @@ export default function Menu() {
     }
   };
 
-  const openMediaViewer = (item: { type: "image" | "video"; src: string; label?: string }) => {
+  const openMediaViewer = (item: { type: "image" | "video"; src: string; label?: string; startTime?: number }) => {
     setMediaViewerItem(item as any);
     setMediaViewerOpen(true);
   };
@@ -208,19 +209,29 @@ export default function Menu() {
             <DialogTitle>{mediaViewerItem?.label || "Media"}</DialogTitle>
           </DialogHeader>
 
-          <div className="w-full max-h-[calc(92vh-5rem)] overflow-auto">
+          <div className="w-full max-h-[calc(92vh-5rem)] overflow-auto flex items-center justify-center">
             {mediaViewerItem?.type === "image" ? (
               <img
                 src={mediaViewerItem.src}
                 alt={mediaViewerItem.label || "Room image"}
-                className="w-full h-auto rounded-lg"
+                className="rounded-lg max-w-full max-h-[calc(92vh-6rem)] object-contain"
               />
             ) : mediaViewerItem?.type === "video" ? (
               <video
                 src={mediaViewerItem.src}
                 controls
                 autoPlay
-                className="w-full rounded-lg"
+                onLoadedMetadata={(e) => {
+                  const startTime = (mediaViewerItem as any)?.startTime;
+                  if (typeof startTime === "number" && Number.isFinite(startTime) && startTime > 0) {
+                    try {
+                      (e.currentTarget as HTMLVideoElement).currentTime = startTime;
+                    } catch {
+                      // ignore seek failures
+                    }
+                  }
+                }}
+                className="rounded-lg max-w-full max-h-[calc(92vh-6rem)] object-contain"
               />
             ) : null}
           </div>
@@ -247,10 +258,10 @@ export default function Menu() {
           ) : (
             <div className="space-y-6 overflow-y-auto pr-1 max-h-[calc(92vh-7rem)]">
               {roomMedia.images.length > 0 && (
-                <Carousel className="w-full">
-                  <CarouselContent>
+                <Carousel className="w-full px-3 sm:px-6">
+                  <CarouselContent className="-ml-3">
                     {roomMedia.images.map((img, idx) => (
-                      <CarouselItem key={idx} className="p-1 basis-full md:basis-1/2">
+                      <CarouselItem key={idx} className="basis-[90%] sm:basis-[75%] md:basis-[48%] pl-3">
                         <div className="relative aspect-video rounded-xl overflow-hidden border border-border">
                           <img src={img.src} alt={img.alt || "Room image"} className="w-full h-full object-cover" />
                           <div className="absolute right-2 top-2">
@@ -273,10 +284,10 @@ export default function Menu() {
               )}
 
               {roomMedia.videos.length > 0 && (
-                <Carousel className="w-full">
-                  <CarouselContent>
+                <Carousel className="w-full px-3 sm:px-6">
+                  <CarouselContent className="-ml-3">
                     {roomMedia.videos.map((v, idx) => (
-                      <CarouselItem key={idx} className="p-1 basis-full">
+                      <CarouselItem key={idx} className="basis-[92%] pl-3">
                         <div className="space-y-2">
                           <div className="flex items-center gap-2">
                             {v.title && <div className="text-sm font-medium">{v.title}</div>}
@@ -285,12 +296,32 @@ export default function Menu() {
                               size="sm"
                               variant="secondary"
                               className="ml-auto"
-                              onClick={() => openMediaViewer({ type: "video", src: v.src, label: v.title || "Room video" })}
+                              onClick={() => {
+                                const key = `${roomDetailsProduct?.id || "room"}-${idx}`;
+                                const el = roomInlineVideoRefs.current[key];
+                                const t = el ? el.currentTime : undefined;
+                                if (el) {
+                                  try {
+                                    el.pause();
+                                  } catch {
+                                    // ignore
+                                  }
+                                }
+                                openMediaViewer({ type: "video", src: v.src, label: v.title || "Room video", startTime: t });
+                              }}
                             >
                               View larger
                             </Button>
                           </div>
-                          <video src={v.src} controls className="w-full rounded-xl border border-border max-h-[55vh]" />
+                          <video
+                            ref={(el) => {
+                              const key = `${roomDetailsProduct?.id || "room"}-${idx}`;
+                              roomInlineVideoRefs.current[key] = el;
+                            }}
+                            src={v.src}
+                            controls
+                            className="w-full rounded-xl border border-border max-h-[55vh]"
+                          />
                         </div>
                       </CarouselItem>
                     ))}

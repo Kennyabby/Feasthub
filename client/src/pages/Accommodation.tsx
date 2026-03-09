@@ -59,10 +59,11 @@ export default function Accommodation() {
   const [isLoadingMedia, setIsLoadingMedia] = useState(true);
   const [isLoadingPrices, setIsLoadingPrices] = useState(true);
   const [roomImageOk, setRoomImageOk] = useState<Record<string, boolean>>({});
+  const roomInlineVideoRefs = useMemo(() => ({ current: {} as Record<string, HTMLVideoElement | null> }), []);
   const [mediaViewerOpen, setMediaViewerOpen] = useState(false);
   const [mediaViewerItem, setMediaViewerItem] = useState<
     | { type: "image"; src: string; label?: string }
-    | { type: "video"; src: string; label?: string }
+    | { type: "video"; src: string; label?: string; startTime?: number }
     | null
   >(null);
 
@@ -183,7 +184,7 @@ export default function Accommodation() {
     });
   }, [roomImages, roomProducts, roomVideos]);
 
-  const openMediaViewer = (item: { type: "image" | "video"; src: string; label?: string }) => {
+  const openMediaViewer = (item: { type: "image" | "video"; src: string; label?: string; startTime?: number }) => {
     setMediaViewerItem(item as any);
     setMediaViewerOpen(true);
   };
@@ -214,6 +215,16 @@ export default function Accommodation() {
                 src={mediaViewerItem.src}
                 controls
                 autoPlay
+                onLoadedMetadata={(e) => {
+                  const startTime = (mediaViewerItem as any)?.startTime;
+                  if (typeof startTime === "number" && Number.isFinite(startTime) && startTime > 0) {
+                    try {
+                      (e.currentTarget as HTMLVideoElement).currentTime = startTime;
+                    } catch {
+                      // ignore seek failures
+                    }
+                  }
+                }}
                 className="rounded-lg max-w-full max-h-[calc(92vh-6rem)] object-contain"
               />
             ) : null}
@@ -267,16 +278,16 @@ export default function Accommodation() {
             </p>
           </div>
 
-          <Carousel className="w-full max-w-5xl mx-auto">
-            <CarouselContent>
+          <Carousel className="w-full max-w-5xl mx-auto px-6 sm:px-10">
+            <CarouselContent className="-ml-3">
               {isLoadingMedia && galleryItems.length === 0
                 ? Array.from({ length: 6 }).map((_, index) => (
-                    <CarouselItem key={index} className="md:basis-1/2 lg:basis-1/3 p-2">
+                    <CarouselItem key={index} className="basis-[85%] sm:basis-[70%] md:basis-[45%] lg:basis-[32%] pl-3">
                       <div className="relative aspect-video rounded-2xl overflow-hidden border border-border bg-muted animate-pulse" />
                     </CarouselItem>
                   ))
                 : galleryItems.map((item: GalleryItem, index: number) => (
-                    <CarouselItem key={index} className="md:basis-1/2 lg:basis-1/3 p-2">
+                    <CarouselItem key={index} className="basis-[85%] sm:basis-[70%] md:basis-[45%] lg:basis-[32%] pl-3">
                       <div className="relative aspect-video rounded-2xl overflow-hidden group border border-border">
                         {item.type === 'video' ? (
                           <div className="relative w-full h-full">
@@ -292,7 +303,18 @@ export default function Accommodation() {
                                 type="button"
                                 size="sm"
                                 variant="secondary"
-                                onClick={() => openMediaViewer({ type: "video", src: item.src, label: item.alt })}
+                                onClick={() => {
+                                  const el = document.querySelector<HTMLVideoElement>(`video[src="${item.src}"]`);
+                                  const t = el ? el.currentTime : undefined;
+                                  if (el) {
+                                    try {
+                                      el.pause();
+                                    } catch {
+                                      // ignore
+                                    }
+                                  }
+                                  openMediaViewer({ type: "video", src: item.src, label: item.alt, startTime: t });
+                                }}
                               >
                                 View larger
                               </Button>
@@ -354,13 +376,33 @@ export default function Accommodation() {
                       </button>
                     ) : room.videoSrc ? (
                       <div className="relative rounded-3xl shadow-2xl overflow-hidden border border-border">
-                        <video src={room.videoSrc} controls playsInline preload="metadata" className="w-full aspect-[4/3] object-cover" />
+                        <video
+                          ref={(el) => {
+                            roomInlineVideoRefs.current[room.name] = el;
+                          }}
+                          src={room.videoSrc}
+                          controls
+                          playsInline
+                          preload="metadata"
+                          className="w-full aspect-[4/3] object-cover"
+                        />
                         <div className="absolute right-4 top-4">
                           <Button
                             type="button"
                             size="sm"
                             variant="secondary"
-                            onClick={() => openMediaViewer({ type: "video", src: room.videoSrc as string, label: room.title })}
+                            onClick={() => {
+                              const el = roomInlineVideoRefs.current[room.name];
+                              const t = el ? el.currentTime : undefined;
+                              if (el) {
+                                try {
+                                  el.pause();
+                                } catch {
+                                  // ignore
+                                }
+                              }
+                              openMediaViewer({ type: "video", src: room.videoSrc as string, label: room.title, startTime: t });
+                            }}
                           >
                             View larger
                           </Button>
@@ -406,6 +448,38 @@ export default function Accommodation() {
                   viewport={{ once: true }}
                 >
                   <h3 className="text-3xl md:text-4xl font-heading font-bold mb-6">{room.title}</h3>
+
+                  <div className="md:hidden mb-6 rounded-xl border border-border bg-background/60 p-4">
+                    <div className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Starting from</div>
+                    <div className="mt-1 text-2xl font-bold text-primary">
+                      {isLoadingPrices ? (
+                        <div className="h-7 w-28 bg-muted rounded animate-pulse" />
+                      ) : room.vipPrice !== undefined ? (
+                        `₦${room.vipPrice.toLocaleString()}`
+                      ) : room.normalPrice !== undefined ? (
+                        `₦${room.normalPrice.toLocaleString()}`
+                      ) : (
+                        ""
+                      )}
+                    </div>
+                    <div className="text-xs font-semibold text-muted-foreground">VIP</div>
+
+                    {room.normalPrice !== undefined && (
+                      <div className="mt-3">
+                        <div className="text-lg font-bold">₦{room.normalPrice.toLocaleString()}</div>
+                        <div className="text-xs font-semibold text-muted-foreground">Normal</div>
+                      </div>
+                    )}
+
+                    {room.shortRestRate && (
+                      <div className="mt-4 border-t border-border pt-4">
+                        <div className="text-sm font-bold">Short Rest</div>
+                        <div className="text-lg font-bold">₦{room.shortRestRate.amount.toLocaleString()}</div>
+                        <div className="text-xs font-semibold text-muted-foreground">{room.shortRestRate.durationLabel}</div>
+                      </div>
+                    )}
+                  </div>
+
                   <p className="text-lg text-muted-foreground mb-8 leading-relaxed">
                     {room.description}
                   </p>
